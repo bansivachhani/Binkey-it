@@ -1,13 +1,27 @@
 import React from "react";
 import logo from "../assets/logo.png";
 import Search from "./Search";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaRegCircleUser } from "react-icons/fa6";
+import useMobile from "../hooks/useMobile";
 
 const Header = () => {
+
+  const [isMobile] = useMobile()
+  const location = useLocation()
+
+  const isSearchPage = location.pathname === '/search'
+
+
+  // console.log(isMobile)
+  // console.log(location)
+  console.log(isSearchPage)
+ 
   return (
     <header className='h-24 lg:h-20 lg:shadow-md sticky top-0 z-40 flex flex-col justify-center gap-1 bg-white'>
-      <div className="container mx-auto  flex items-center px-2 justify-between">
+      {
+          !( isSearchPage && isMobile) && (
+             <div className="container mx-auto  flex items-center px-2 justify-between">
         {/* logo */}
         <div className="h-full">
           <Link to={"/"} className="h-full flex justify-center items-center">
@@ -43,7 +57,12 @@ const Header = () => {
             Login and my cart
            </div>
         </div>
-      </div>
+              </div>
+          ) 
+      }
+      
+      
+     
 
       <div className="container mx-auto px-2 lg:hidden">
         <Search/>
