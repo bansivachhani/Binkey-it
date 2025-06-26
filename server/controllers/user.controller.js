@@ -4,6 +4,7 @@ import bcryptjs from "bcryptjs";
 import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
+import { response } from "express";
 
 export async function registerUserController(req, res) {
   try {
@@ -170,4 +171,38 @@ export async function loginController(req, res) {
       success: false,
     });
   }
+}
+
+//log out controller
+export async function logoutController(req,res){
+    try{
+
+        const userid = req.userId
+
+        const cookiesOption = {
+            httpOnly : true,
+            secure : true,
+            sameSite : "None"
+        }
+
+        res.clearCookie("accessToken",cookiesOption)
+        res.clearCookie("refreshToken",cookiesOption)
+
+        const removeRefreshToken = await UserModel.findByIdAndUpdate(userid,{
+            refresh_token : ""
+        })
+
+        return res.json({
+            message: "Logout Successfully",
+            error: false,
+            success: true,
+        })
+    }
+    catch(error){
+        return res.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false,
+        })
+    }
 }
