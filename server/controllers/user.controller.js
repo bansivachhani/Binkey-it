@@ -106,12 +106,12 @@ export async function loginController(req, res) {
   try {
     const { email, password } = req.body;
 
-    if(!email || !password) {
-        return res.status(400).json({
-            message: "Email and password are required",
-            error: true,
-            success: false,
-        })
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Email and password are required",
+        error: true,
+        success: false,
+      });
     }
 
     const user = await UserModel.findOne({ email });
@@ -142,28 +142,26 @@ export async function loginController(req, res) {
       });
     }
 
-    const accesstoken = await generateAccessToken(user._id)
-    const refreshToken = await generateRefreshToken(user._id)
+    const accesstoken = await generateAccessToken(user._id);
+    const refreshToken = await generateRefreshToken(user._id);
 
     const cookiesOption = {
-        httpOnly : true,
-        secure : true,
-        sameSite : "None"
-    }
-    res.cookie('accessToken',accesstoken,cookiesOption)
-    res.cookie('refreshToken',refreshToken,cookiesOption)
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    };
+    res.cookie("accessToken", accesstoken, cookiesOption);
+    res.cookie("refreshToken", refreshToken, cookiesOption);
 
     return res.json({
-        message: "Login Successfully",
-        error: false,
-        success: true,
-        data : {
-            accesstoken,
-            refreshToken
-        }
-    })
-
-
+      message: "Login Successfully",
+      error: false,
+      success: true,
+      data: {
+        accesstoken,
+        refreshToken,
+      },
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,
@@ -174,35 +172,42 @@ export async function loginController(req, res) {
 }
 
 //log out controller
-export async function logoutController(req,res){
-    try{
+export async function logoutController(req, res) {
+  try {
+    const userid = req.userId;
 
-        const userid = req.userId
+    const cookiesOption = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    };
 
-        const cookiesOption = {
-            httpOnly : true,
-            secure : true,
-            sameSite : "None"
-        }
+    res.clearCookie("accessToken", cookiesOption);
+    res.clearCookie("refreshToken", cookiesOption);
 
-        res.clearCookie("accessToken",cookiesOption)
-        res.clearCookie("refreshToken",cookiesOption)
+    const removeRefreshToken = await UserModel.findByIdAndUpdate(userid, {
+      refresh_token: "",
+    });
 
-        const removeRefreshToken = await UserModel.findByIdAndUpdate(userid,{
-            refresh_token : ""
-        })
+    return res.json({
+      message: "Logout Successfully",
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
 
-        return res.json({
-            message: "Logout Successfully",
-            error: false,
-            success: true,
-        })
-    }
-    catch(error){
-        return res.status(500).json({
-            message: error.message || error,
-            error: true,
-            success: false,
-        })
-    }
+//upload user avatar
+export async function uploadAvatar(req, res) {
+  try {
+  } 
+  catch (error) {
+    
+  }
 }
