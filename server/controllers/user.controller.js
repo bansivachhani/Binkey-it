@@ -2,6 +2,8 @@ import sendEmail from "../config/sendEmail.js";
 import UserModel from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
+import generateAccessToken from "../utils/generateAccessToken.js";
+import generateRefreshToken from "../utils/generateRefreshToken.js";
 
 export async function registerUserController(req, res) {
   try {
@@ -85,7 +87,7 @@ export async function verifyEmailController(req, res) {
     );
 
     return res.json({
-      message: "Verify Email successfully",
+      message: "Verify Email done",
       error: false,
       success: true,
     });
@@ -103,6 +105,14 @@ export async function loginController(req, res) {
   try {
     const { email, password } = req.body;
 
+    if(!email || !password) {
+        return res.status(400).json({
+            message: "Email and password are required",
+            error: true,
+            success: false,
+        })
+    }
+
     const user = await UserModel.findOne({ email });
 
     if (!user) {
@@ -115,7 +125,7 @@ export async function loginController(req, res) {
 
     if (user.status !== "Active") {
       return res.status(400).json({
-        message: "User not active ,Contact to Admin",
+        message: "Contact to Admin",
         error: true,
         success: false,
       });
@@ -131,7 +141,27 @@ export async function loginController(req, res) {
       });
     }
 
-    
+    const accesstoken = await generateAccessToken(user._id)
+    const refreshToken = await generateRefreshToken(user._id)
+
+    const cookiesOption = {
+        httpOnly : true,
+        secure : true,
+        sameSite : "None"
+    }
+    res.cookie('accessToken',accesstoken,cookiesOption)
+    res.cookie('refreshToken',refreshToken,cookiesOption)
+
+    return res.json({
+        message: "Login Successfully",
+        error: false,
+        success: true,
+        data : {
+            accesstoken,
+            refreshToken
+        }
+    })
+
 
   } catch (error) {
     return res.status(500).json({
