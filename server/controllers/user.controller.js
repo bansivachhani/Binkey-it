@@ -5,6 +5,7 @@ import verifyEmailTemplate from "../utils/verifyEmailTemplate.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 import { response } from "express";
+import uploadImageClodinary from "../utils/uploadImageClodinary.js";
 
 export async function registerUserController(req, res) {
   try {
@@ -206,8 +207,29 @@ export async function logoutController(req, res) {
 //upload user avatar
 export async function uploadAvatar(req, res) {
   try {
-  } 
-  catch (error) {
-    
+    const userId = req.userId; //auth middleware
+    const image = req.file; //multer middleware
+
+    const upload = await uploadImageClodinary(image);
+
+    const updateUser = await UserModel.findByIdAndUpdate(userId, {
+      avatar: upload.url,
+    });
+
+    return res.json({
+      message: "Avatar uploaded successfully",
+      error: false,
+      success: true,
+      data: {
+        _id: userId,
+        avatar: upload.url,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
   }
 }
