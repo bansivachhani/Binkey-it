@@ -8,6 +8,7 @@ import { response } from "express";
 import uploadImageClodinary from "../utils/uploadImageClodinary.js";
 import generateOtp from "../utils/generatedOtp.js";
 import forgotPasswordTemplate from "../utils/forgotPasswordTemplate.js";
+import jwt from "jsonwebtoken";
 
 export async function registerUserController(req, res) {
   try {
@@ -320,67 +321,67 @@ export async function forgotPasswordController(req, res) {
 }
 
 //verify forgot password otp
-export async function verifyForgotPasswordOtp(request,response){
-    try {
-        const { email , otp }  = request.body
+export async function verifyForgotPasswordOtp(req, res) {
+  try {
+    const { email, otp } = req.body;
 
-        if(!email || !otp){
-            return response.status(400).json({
-                message : "Provide required field email, otp.",
-                error : true,
-                success : false
-            })
-        }
-
-        const user = await UserModel.findOne({ email })
-
-        if(!user){
-            return response.status(400).json({
-                message : "Email not available",
-                error : true,
-                success : false
-            })
-        }
-
-        const currentTime = new Date().toISOString()
-
-        if(user.forgot_password_expiry < currentTime  ){
-            return response.status(400).json({
-                message : "Otp is expired",
-                error : true,
-                success : false
-            })
-        }
-
-        if(otp !== user.forgot_password_otp){
-            return response.status(400).json({
-                message : "Invalid otp",
-                error : true,
-                success : false
-            })
-        }
-
-        //if otp is not expired
-        //otp === user.forgot_password_otp
-
-        const updateUser = await UserModel.findByIdAndUpdate(user?._id,{
-            forgot_password_otp : "",
-            forgot_password_expiry : ""
-        })
-        
-        return response.json({
-            message : "Verify otp successfully",
-            error : false,
-            success : true
-        })
-
-    } catch (error) {
-        return response.status(500).json({
-            message : error.message || error,
-            error : true,
-            success : false
-        })
+    if (!email || !otp) {
+      return res.status(400).json({
+        message: "Provide required field email, otp.",
+        error: true,
+        success: false,
+      });
     }
+
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Email not availale",
+        error: true,
+        success: false,
+      });
+    }
+
+    const currentTime = new Date().toISOString();
+
+    if (user.forgot_password_expiry < currentTime) {
+      return res.status(400).json({
+        message: "Otp is expired",
+        error: true,
+        success: false,
+      });
+    }
+
+    if (otp !== user.forgot_password_otp) {
+      return res.status(400).json({
+        message: "Invalid otp",
+        error: true,
+        success: false,
+      });
+    }
+
+    //if otp is not espires
+    //otp === user.forgot_password_otp
+
+    //update the user forgot_password_otp and forgot_password_expiry
+    const update = await UserModel.findByIdAndUpdate(user?._id, {
+      forgot_password_otp: "",
+      forgot_password_expiry: "",
+    });
+
+    return res.json({
+      message: "Verify otp successfully",
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
 }
 
 //reset the password
@@ -390,7 +391,7 @@ export async function resetPassword(req, res) {
 
     if (!email || !newPassword || !confirmPassword) {
       return res.status(400).json({
-        message: "Provide required fields email,newPassword,confirmPassword",
+        message: "provide requires field email, newPassword, confirmPassword",
       });
     }
 
@@ -398,7 +399,7 @@ export async function resetPassword(req, res) {
 
     if (!user) {
       return res.status(400).json({
-        message: "Email is not available",
+        message: "Email is not availale",
         error: true,
         success: false,
       });
@@ -406,12 +407,13 @@ export async function resetPassword(req, res) {
 
     if (newPassword !== confirmPassword) {
       return res.status(400).json({
-        message: "Password and confirm password does not match",
+        message: "newPassword and confirmPassword not same its must be same",
         error: true,
-        success: false,
+        success: true,
       });
     }
 
+    // Hash the password before saving
     const salt = await bcryptjs.genSalt(10);
     const hashPassword = await bcryptjs.hash(newPassword, salt);
 
@@ -423,6 +425,63 @@ export async function resetPassword(req, res) {
       message: "Password updated successfully",
       error: false,
       success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}
+
+//refresh token
+export async function refreshToken(req, res) {
+  try {
+    const refreshToken =
+      req.cookies.refreshToken || req?.headers?.authorization?.split(" ")[1];
+
+    if (!refreshToken) {
+      return res.status(400).json({
+        message: "Invalid Token",
+        error: true,
+        success: false,
+      });
+    }
+
+    const verifyToken = await jwt.verify(
+      refreshToken,
+      process.env.SECRET_KEY_REFRESH_TOKEN
+    );
+
+    if (!verifyToken) {
+      return res.status(401).json({
+        message: "token is expired",
+        error: true,
+        success: false,
+      });
+    }
+
+    // console.log(verifyToken);
+    const userId = verifyToken?._id;
+
+    const newAccessToken = await generateAccessToken(userId);
+
+    const cookiesOption = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    };
+
+    res.cookie("accessToken", newAccessToken, cookiesOption);
+
+    return res.json({
+      message: "New Access token generated",
+      error: false,
+      success: true,
+      data: {
+        accesstoken: newAccessToken,
+      },
     });
   } catch (error) {
     return res.status(500).json({
