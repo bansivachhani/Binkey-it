@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
 import toast from "react-hot-toast";
@@ -15,6 +15,12 @@ const OtpVerification = () => {
 
   console.log(location)
 
+  useEffect(()=>{
+    if(!location?.state?.email){
+        navigate('/forgot-password')
+    }
+  },[])
+
   const valideValue = data.every((el) => el);
 
   const handleSubmit = async (e) => {
@@ -25,6 +31,7 @@ const OtpVerification = () => {
         ...SummaryApi.forgot_password_otp_verification,
         data: {
             otp: data.join(""),
+            email: location?.state?.email
         }
       });
 
