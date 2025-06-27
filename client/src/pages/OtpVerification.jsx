@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
 import toast from "react-hot-toast";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
 import AxiosToastError from "../utils/AxiosToastError";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const OtpVerification = () => {
-  const [data, setData] = useState(["","","","","",""])
+  const [data, setData] = useState(["", "", "", "", "", ""]);
   const navigate = useNavigate();
+  const inputRef = useRef([]);
+  const location = useLocation()
 
-  
+  console.log(location)
+
   const valideValue = data.every((el) => el);
 
   const handleSubmit = async (e) => {
@@ -20,7 +23,9 @@ const OtpVerification = () => {
     try {
       const response = await Axios({
         ...SummaryApi.forgot_password_otp_verification,
-        data: data,
+        data: {
+            otp: data.join(""),
+        }
       });
 
       if (response.data.error) {
@@ -29,7 +34,7 @@ const OtpVerification = () => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setData(["","","","","",""])
+        setData(["", "", "", "", "", ""]);
 
         //navigate("/verification-otp");
       }
@@ -41,20 +46,41 @@ const OtpVerification = () => {
   return (
     <section className=" w-full container mx-auto px-2">
       <div className="bg-white my-4 w-full max-w-lg mx-auto rounded p-9">
-        <p className="font-semibold text-lg">Enter Otp</p>
+        <p className="font-semibold text-lg">Enter OTP</p>
 
         <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
           <div className="grid gap-1">
-            <label htmlFor="email">Enter Your Otp : </label>
-            <input
-              type="email"
-              id="email"
-              className="bg-blue-50 p-2 border rounded outline-none focus:border-primary-200"
-              name="email"
-              value={data.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-            />
+            <label htmlFor="otp">Enter Your OTP : </label>
+            <div className="flex items-center gap-2 justify-between mt-3 ">
+              {data.map((element, index) => {
+                return (
+                  <input
+                    key={"otp" + index}
+                    type="text"
+                    id="otp"
+                    ref={(ref) => {
+                      inputRef.current[index] = ref;
+                      return ref;
+                    }}
+                    value={data[index]}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      console.log(value);
+
+                      const newData = [...data];
+                      newData[index] = value;
+                      setData(newData);
+
+                      if (value && index < 5) {
+                        inputRef.current[index + 1].focus();
+                      }
+                    }}
+                    maxLength={1}
+                    className="bg-blue-50 w-full max-w-16 p-2 border rounded outline-none focus:border-primary-200 text-center font-semibold"
+                  />
+                );
+              })}
+            </div>
           </div>
 
           <button
@@ -63,7 +89,7 @@ const OtpVerification = () => {
               valideValue ? "bg-green-800 hover:bg-green-700" : " bg-gray-500"
             } text-white py-2 rounded font-semibold my-3 tracking-wide`}
           >
-            Send Otp
+            Verify Otp
           </button>
         </form>
 
@@ -81,4 +107,4 @@ const OtpVerification = () => {
   );
 };
 
-export default OtpVerification
+export default OtpVerification;
