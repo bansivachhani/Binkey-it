@@ -27,6 +27,19 @@ const Header = () => {
     navigate("/login");
   };
 
+  const handleCloseUserMenu = () => {
+    setOpenUserMenu(false);
+  };
+
+  const handleMobileUser = () => {
+    if (!user._id) {
+      navigate("/login");
+      return;
+    }
+
+    navigate("/user");
+  };
+
   return (
     <header className="h-24 lg:h-20 lg:shadow-md sticky top-0 z-40 flex flex-col justify-center gap-1 bg-white">
       {!(isSearchPage && isMobile) && (
@@ -59,7 +72,10 @@ const Header = () => {
           {/* login and my cart */}
           <div className="">
             {/**user icons display in only mobile version */}
-            <button className="text-neutral-600 lg:hidden">
+            <button
+              className="text-neutral-600 lg:hidden"
+              onClick={handleMobileUser}
+            >
               <FaRegCircleUser size={26} />
             </button>
 
@@ -67,31 +83,24 @@ const Header = () => {
             <div className="hidden lg:flex items-center gap-10">
               {user?._id ? (
                 <div className="relative">
-                  <div onClick={()=>setOpenUserMenu(preve=>!preve)} className="flex select-none items-center gap-1 cursor-pointer">
+                  <div
+                    onClick={() => setOpenUserMenu((preve) => !preve)}
+                    className="flex select-none items-center gap-1 cursor-pointer"
+                  >
                     <p>Account</p>
-                    {
-                      openUserMenu ? (
-                         <GoTriangleUp size={25}/> 
-
-                      ) : (
-                        <GoTriangleDown size={25} />
-
-                      )
-                    }
-                    
-                    
+                    {openUserMenu ? (
+                      <GoTriangleUp size={25} />
+                    ) : (
+                      <GoTriangleDown size={25} />
+                    )}
                   </div>
-                  {
-                    openUserMenu && (
-                           <div className="absolute right-0 top-14">
-                            <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
-                              <UserMenu/>
-
-                            </div>
-                          </div>
-                    ) 
-                  }
-             
+                  {openUserMenu && (
+                    <div className="absolute right-0 top-14">
+                      <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg">
+                        <UserMenu close={handleCloseUserMenu} />
+                      </div>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <button onClick={redirectToLoginPage} className="text-lg px-2">
