@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa6";
+import toast from "react-hot-toast";
+import Axios from "../utils/Axios";
+import SummaryApi from "../common/SummaryApi";
+import AxiosToastError from "../utils/AxiosToastError";
 
 const Register = () => {
   const [data, setData] = useState({
@@ -23,11 +27,34 @@ const Register = () => {
     });
   };
 
-  const valideValue = Object.values(data).every(el=>el)
+  const valideValue = Object.values(data).every((el) => el);
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (data.password !== data.confirmPassword) {
+      toast.error("password and confirm password must be same");
+      return;
+    }
+
+    try {
+      const response = await Axios({
+        ...SummaryApi.register,
+        data : data
+      });
+      if(response.data.error){
+        toast.error(response.data.message);
+      }
+
+      if(response.data.success)
+      {
+        toast.success(response.data.message);
+      }
+
+    } catch (error) {
+      AxiosToastError(error)
+    }
+  };
 
   return (
     <section className=" w-full container mx-auto px-2">
@@ -105,7 +132,10 @@ const Register = () => {
           </div>
 
           <button
-            className={` ${valideValue ? "bg-green-800 hover:bg-green-700" : " bg-gray-500" } text-white py-2 rounded font-semibold my-3 tracking-wide`}
+            disabled={!valideValue}
+            className={` ${
+              valideValue ? "bg-green-800 hover:bg-green-700" : " bg-gray-500"
+            } text-white py-2 rounded font-semibold my-3 tracking-wide`}
           >
             Register
           </button>
