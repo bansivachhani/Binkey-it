@@ -13,13 +13,11 @@ const OtpVerification = () => {
   const inputRef = useRef([]);
   const location = useLocation();
 
-  console.log(location);
-
   useEffect(() => {
     if (!location?.state?.email) {
       navigate("/forgot-password");
     }
-  }, []);
+  }, [location, navigate]);
 
   const valideValue = data.every((el) => el);
 
@@ -37,80 +35,67 @@ const OtpVerification = () => {
 
       if (response.data.error) {
         toast.error(response.data.message);
+        return;
       }
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setData(["", "", "", "", "", ""]);
 
-        navigate("/reset-password",{
-            state: {
-                data : response.data,
-                email: location?.state?.email
-            }
-        });
+        // ✅ Store reset password info
+        localStorage.setItem("resetPasswordData", JSON.stringify({
+          email: location?.state?.email,
+          success: true
+        }));
+
+        // Navigate without state
+        navigate("/reset-password");
       }
+
     } catch (error) {
       AxiosToastError(error);
     }
   };
 
   return (
-    <section className=" w-full container mx-auto px-2">
+    <section className="w-full container mx-auto px-2">
       <div className="bg-white my-4 w-full max-w-lg mx-auto rounded p-9">
         <p className="font-semibold text-lg">Enter OTP</p>
 
         <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
-          <div className="grid gap-1">
-            <label htmlFor="otp">Enter Your OTP : </label>
-            <div className="flex items-center gap-2 justify-between mt-3 ">
-              {data.map((element, index) => {
-                return (
-                  <input
-                    key={"otp" + index}
-                    type="text"
-                    id="otp"
-                    ref={(ref) => {
-                      inputRef.current[index] = ref;
-                      return ref;
-                    }}
-                    value={data[index]}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      console.log(value);
-
-                      const newData = [...data];
-                      newData[index] = value;
-                      setData(newData);
-
-                      if (value && index < 5) {
-                        inputRef.current[index + 1].focus();
-                      }
-                    }}
-                    maxLength={1}
-                    className="bg-blue-50 w-full max-w-16 p-2 border rounded outline-none focus:border-primary-200 text-center font-semibold"
-                  />
-                );
-              })}
-            </div>
+          <label>Enter Your OTP:</label>
+          <div className="flex items-center gap-2 justify-between mt-3">
+            {data.map((val, index) => (
+              <input
+                key={index}
+                type="text"
+                ref={(ref) => (inputRef.current[index] = ref)}
+                maxLength={1}
+                className="bg-blue-50 w-full max-w-16 p-2 border rounded outline-none focus:border-primary-200 text-center font-semibold"
+                value={val}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const newData = [...data];
+                  newData[index] = value;
+                  setData(newData);
+                  if (value && index < 5) inputRef.current[index + 1].focus();
+                }}
+              />
+            ))}
           </div>
 
           <button
             disabled={!valideValue}
-            className={` ${
-              valideValue ? "bg-green-800 hover:bg-green-700" : " bg-gray-500"
+            className={`${
+              valideValue ? "bg-green-800 hover:bg-green-700" : "bg-gray-500"
             } text-white py-2 rounded font-semibold my-3 tracking-wide`}
           >
-            Verify Otp
+            Verify OTP
           </button>
         </form>
 
         <p>
-          Already have account ?
-          <Link
-            to={"/login"}
-            className="font-semibold text-green-700 hover:text-green-800"
-          >
+          Already have an account?{" "}
+          <Link to="/login" className="font-semibold text-green-700 hover:text-green-800">
             Login
           </Link>
         </p>
