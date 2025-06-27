@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import Axios from "../utils/Axios";
 import SummaryApi from "../common/SummaryApi";
 import AxiosToastError from "../utils/AxiosToastError";
+import { Link,useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [data, setData] = useState({
@@ -16,6 +17,7 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,19 +42,25 @@ const Register = () => {
     try {
       const response = await Axios({
         ...SummaryApi.register,
-        data : data
+        data: data,
       });
-      if(response.data.error){
+      if (response.data.error) {
         toast.error(response.data.message);
       }
 
-      if(response.data.success)
-      {
+      if (response.data.success) {
         toast.success(response.data.message);
-      }
+        setData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
 
+        navigate("/login");
+      }
     } catch (error) {
-      AxiosToastError(error)
+      AxiosToastError(error);
     }
   };
 
@@ -140,6 +148,12 @@ const Register = () => {
             Register
           </button>
         </form>
+
+        <p>
+          Already have account ? 
+          <Link to={"/login"} className="font-semibold text-green-700 hover:text-green-800">
+          Login</Link>
+        </p>
       </div>
     </section>
   );
