@@ -17,7 +17,7 @@ const Header = () => {
   const user = useSelector((state) => state?.user);
   const [openUserMenu, setOpenUserMenu] = useState(false);
 
-  console.log(user);
+  
 
   // console.log(isMobile)
   // console.log(location)
