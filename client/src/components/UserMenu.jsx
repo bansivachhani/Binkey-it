@@ -49,20 +49,54 @@ const UserMenu = ({ close }) => {
           {user.name || user.mobile}
         </span>
 
-        <Link onClick={handleClose} to={"/dashboard/profile"} className="hover:text-primary-200">
+        <Link
+          onClick={handleClose}
+          to={"/dashboard/profile"}
+          className="hover:text-primary-200"
+        >
           <HiOutlineExternalLink size={15} />
         </Link>
       </div>
 
       <Divider />
       <div className="text-sm grid gap-2">
-        <Link onClick={handleClose}
+
+        <Link
+          onClick={handleClose}
+          to={"/dashboard/category"}
+          className="px-2 hover:bg-orange-300 py-1">
+          Category
+        </Link>
+
+        <Link
+          onClick={handleClose}
+          to={"/dashboard/subcategory"}
+          className="px-2 hover:bg-orange-300 py-1">
+          Sub Category
+        </Link>
+
+        <Link
+          onClick={handleClose}
+          to={"/dashboard/upload-product"}
+          className="px-2 hover:bg-orange-300 py-1">
+          Upload Product
+        </Link>
+
+         <Link
+          onClick={handleClose}
+          to={"/dashboard/product"}
+          className="px-2 hover:bg-orange-300 py-1">
+          Product
+        </Link>
+
+          <Link
+          onClick={handleClose}
           to={"/dashboard/myorders"}
-          className="px-2 hover:bg-orange-300 py-1"
-        >
+          className="px-2 hover:bg-orange-300 py-1">
           My Orders
         </Link>
-        <Link onClick={handleClose}
+        <Link
+          onClick={handleClose}
           to={"/dashboard/address"}
           className="px-2 hover:bg-orange-300 py-1"
         >
