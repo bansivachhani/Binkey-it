@@ -48,7 +48,7 @@ const SummaryApi = {
     method: "post",
   },
   uploadImage : {
-    url: "/api/image/upload",
+    url: "/api/file/upload",
     method: "post",
   }
 };

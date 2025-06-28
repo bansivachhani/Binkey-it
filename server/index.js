@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/user", userRouter);
 app.use("/api/category",categoryRouter);
-app.use("/file",uploadRouter)
+app.use("/api/file",uploadRouter)
 
 // Connect DB and start server
 connectDB().then(() => {

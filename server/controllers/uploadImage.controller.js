@@ -1,10 +1,20 @@
-const uploadImageController = (req,res)=>{
+import uploadImageClodinary from "../utils/uploadImageClodinary.js";
+
+const uploadImageController = async(req,res)=>{
     try{
 
         const file = req.file;
 
+        console.log(file)
 
+        const uploadImage = await uploadImageClodinary(file)
 
+        return res.json({
+            message: "Image uploaded successfully",
+            data: uploadImage,
+            success : true,
+            error : false
+        })
     }
     catch(error)
     {
