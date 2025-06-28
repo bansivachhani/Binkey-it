@@ -59,6 +59,7 @@ const UploadSubCategoryModel = ({ close }) => {
 
   const handleSubmitSubCategory = async (e) => {
     e.preventDefault();
+    
 
     try {
       const response = await Axios({
