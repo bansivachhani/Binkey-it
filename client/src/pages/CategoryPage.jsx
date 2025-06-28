@@ -52,15 +52,15 @@ const CategoryPage = () => {
                 <NoData/>
             )
         }
-       <div className='p-4'>
+       <div className='p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-2'>
          {
             categoryData.map((category,index)=>{
                 return(
-                    <div className='w-40 h-56  bg-red-500 rounded shadow-md'>
+                    <div className='w-32 h-48 rounded shadow-md'>
                         <img
                             alt={category.name}
                             src={category.image}
-                            className='w-52 object-scale-down'
+                            className='w-full object-scale-down'
                         />
                     </div>
                 )
@@ -77,7 +77,7 @@ const CategoryPage = () => {
 
         {
             openUploadCategory && (
-                <UploadCategoryModel close={()=>setOpenUploadCategory(false)}/>
+                <UploadCategoryModel fetchData={fetchCategory} close={()=>setOpenUploadCategory(false)}/>
             )
         }
 

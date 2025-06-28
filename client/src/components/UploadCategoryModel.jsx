@@ -46,7 +46,7 @@ const UploadCategoryModel = ({ close,fetchData }) => {
         toast.dismiss()
         toast.success(responseData.message);
         close();
-        //fetchData();
+        fetchData();
       }
     } catch (error) {
       AxiosToastError(error);
