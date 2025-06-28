@@ -10,6 +10,7 @@ import { IoClose } from 'react-icons/io5'
 import ConfirmBox from '../components/ConfirmBox'
 import AxiosToastError from '../utils/AxiosToastError'
 import toast from 'react-hot-toast'
+import { useSelector } from 'react-redux'
 
 const CategoryPage = () => {
 
@@ -26,33 +27,39 @@ const CategoryPage = () => {
         _id : ""
     })
 
-    const fetchCategory = async()=>{
-        try{
-            setLoading(true)
-
-            const response = await Axios({
-                ...SummaryApi.getCategory,
-                
-            })
-            const {data:responseData} = response
-
-            if(responseData.success){
-                setCategoryData(responseData.data)
-            }
-            
-        }
-        catch(error)
-        {
-
-        }
-        finally{
-            setLoading(false)
-        }
-    }
-
+    const allCategory = useSelector(state=>state.product.allCategory)
+    
     useEffect(()=>{
-        fetchCategory()
-    },[])
+        setCategoryData(allCategory)
+    },[allCategory])
+
+    // const fetchCategory = async()=>{
+    //     try{
+    //         setLoading(true)
+
+    //         const response = await Axios({
+    //             ...SummaryApi.getCategory,
+                
+    //         })
+    //         const {data:responseData} = response
+
+    //         if(responseData.success){
+    //             setCategoryData(responseData.data)
+    //         }
+            
+    //     }
+    //     catch(error)
+    //     {
+
+    //     }
+    //     finally{
+    //         setLoading(false)
+    //     }
+    // }
+
+    // useEffect(()=>{
+    //     fetchCategory()
+    // },[])
 
     const handleDeleteCategory = async() => {
         try{
