@@ -6,7 +6,7 @@ import SummaryApi from "../common/SummaryApi";
 import toast from "react-hot-toast";
 import AxiosToastError from "../utils/AxiosToastError";
 
-const UploadCategoryModel = ({ close,fetchData }) => {
+const UploadCategoryModel = ({ close, fetchData }) => {
   const [data, setData] = useState({
     name: "",
     image: "",
@@ -27,12 +27,11 @@ const UploadCategoryModel = ({ close,fetchData }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-     if (!data.image) {
-    toast.dismiss();
-    toast.error("Please upload an image before submitting.");
-    return;
+    if (!data.image) {
+      toast.dismiss();
+      toast.error("Please upload an image before submitting.");
+      return;
     }
-
 
     try {
       setLoading(true);
@@ -43,7 +42,7 @@ const UploadCategoryModel = ({ close,fetchData }) => {
       const { data: responseData } = response;
 
       if (responseData.success) {
-        toast.dismiss()
+        toast.dismiss();
         toast.success(responseData.message);
         close();
         fetchData();
@@ -55,32 +54,32 @@ const UploadCategoryModel = ({ close,fetchData }) => {
     }
   };
 
- const handleUploadCategoryImage = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+  const handleUploadCategoryImage = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  try {
-    const response = await uploadImage(file);
+    try {
+      const response = await uploadImage(file);
 
-    if (!response?.data?.success || !response.data.data?.url) {
+      if (!response?.data?.success || !response.data.data?.url) {
+        toast.dismiss();
+        toast.error(response?.data?.message || "Image upload failed!");
+        return; // STOP here
+      }
+
       toast.dismiss();
-      toast.error(response?.data?.message || "Image upload failed!");
-      return; // STOP here
+      setData((prev) => ({
+        ...prev,
+        image: response.data.data.url,
+      }));
+      toast.success("Image uploaded successfully");
+    } catch (err) {
+      toast.dismiss();
+      toast.error(
+        err?.response?.data?.message || err?.message || "Image upload failed!"
+      );
     }
-
-    toast.dismiss();
-    setData((prev) => ({
-      ...prev,
-      image: response.data.data.url,
-    }));
-    toast.success("Image uploaded successfully");
-  } catch (err) {
-    toast.dismiss();
-    toast.error(err?.response?.data?.message || err?.message || "Image upload failed!");
-  }
-};
-
-
+  };
 
   return (
     <section className="fixed top-0 bottom-0 left-0 right-0 p-4 bg-neutral-800 bg-opacity-60 flex items-center justify-center">

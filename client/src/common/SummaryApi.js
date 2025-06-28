@@ -1,3 +1,4 @@
+import { updateCategoryController } from "../../../server/controllers/category.controller";
 import { logout } from "../store/userSlice";
 
 export const baseURL = "http://localhost:8080";
@@ -54,6 +55,10 @@ const SummaryApi = {
   getCategory : {
     url : '/api/category/get',
     method : 'get',
+  },
+  updateCategory : {
+    url : '/api/category/update',
+    method : 'put',
   }
 };
 

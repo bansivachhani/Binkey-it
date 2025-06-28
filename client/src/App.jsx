@@ -16,7 +16,11 @@ function App() {
   const fetchUser = async() =>{
     const userData = await fetchUserDetails()
     //console.log("userData",userData.data)
-    dispatch(setUserDetails(userData.data))
+    if (userData?.success && userData?.data) {
+    dispatch(setUserDetails(userData.data));
+    } else {
+    console.log("User not logged in or error fetching user details.");
+  }
   }
   
   useEffect(()=>{

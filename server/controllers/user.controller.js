@@ -369,10 +369,10 @@ export async function verifyForgotPasswordOtp(req, res) {
     //otp === user.forgot_password_otp
 
     //update the user forgot_password_otp and forgot_password_expiry
-    const updateUser = await UserModel.findByIdAndUpdate(user?._id,{
-      forgot_password_otp: '',
-      forgot_password_expiry: '',
-    })
+    const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
+      forgot_password_otp: "",
+      forgot_password_expiry: "",
+    });
 
     return res.json({
       message: "Verify otp successfully",
@@ -500,11 +500,25 @@ export async function userDetails(req, res) {
   try {
     const userId = req.userId;
 
-    console.log(userId);
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized: Missing user ID",
+        error: true,
+        success: false,
+      });
+    }
 
     const user = await UserModel.findById(userId).select(
       "-password -refresh_token"
     );
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        error: true,
+        success: false,
+      });
+    }
 
     return res.json({
       message: "User details fetched successfully",

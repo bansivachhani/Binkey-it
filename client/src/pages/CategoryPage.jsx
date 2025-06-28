@@ -5,12 +5,19 @@ import Loading from '../components/Loading'
 import NoData from '../components/NoData'
 import Axios from '../utils/Axios'
 import SummaryApi from '../common/SummaryApi'
+import EditCategory from '../components/EditCategory'
+import { IoClose } from 'react-icons/io5'
 
 const CategoryPage = () => {
 
     const [openUploadCategory,setOpenUploadCategory] = useState(false)
     const [loading,setLoading] = useState(false)
     const [categoryData,setCategoryData] = useState([])
+    const [openEdit,setOpenEdit] = useState(false)
+    const [editData,setEditData] = useState({
+        name : "",
+        image : "",
+    })
 
     const fetchCategory = async()=>{
         try{
@@ -40,6 +47,8 @@ const CategoryPage = () => {
         fetchCategory()
     },[])
 
+    console.log(categoryData)
+
   return (
     <section>
         <div className='p-2  bg-white shadow-md flex items-center justify-between '>
@@ -56,12 +65,23 @@ const CategoryPage = () => {
          {
             categoryData.map((category,index)=>{
                 return(
-                    <div className='w-32 h-48 rounded shadow-md'>
+                    <div className='w-32 h-56 rounded shadow-md'>
                         <img
                             alt={category.name}
                             src={category.image}
                             className='w-full object-scale-down'
                         />
+                        <div className='items-center h-9 flex gap-2'>
+                             <button onClick={()=>{
+                                    setOpenEdit(true)
+                                    setEditData(category)
+                                }} className='flex-1 bg-green-100 hover:bg-green-200 text-green-600 font-medium py-1 rounded'>
+                                    Edit
+                                </button>
+                            <button className='flex-1 bg-red-100 hover:bg-red-200 text-red-600 font-medium py-1 rounded'>
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 )
             })
@@ -72,12 +92,14 @@ const CategoryPage = () => {
                 <Loading/>
             )
         }
-
-
-
         {
             openUploadCategory && (
                 <UploadCategoryModel fetchData={fetchCategory} close={()=>setOpenUploadCategory(false)}/>
+            )
+        }
+        {
+            openEdit && (
+                <EditCategory data={editData} close={()=>setOpenEdit(false)} fetchData={fetchCategory}/>
             )
         }
 
