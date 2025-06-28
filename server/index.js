@@ -6,6 +6,8 @@ import morgan from "morgan";
 import helmet from "helmet";
 import connectDB from "./config/connectDB.js";
 import userRouter from "./route/user.route.js";
+import categoryRouter from "./route/category.route.js";
+import uploadRouter from "./route/upload.router.js";
 
 dotenv.config();
 
@@ -36,6 +38,8 @@ app.get("/", (req, res) => {
   });
 });
 app.use("/api/user", userRouter);
+app.use("/api/category",categoryRouter);
+app.use("/file",uploadRouter)
 
 // Connect DB and start server
 connectDB().then(() => {

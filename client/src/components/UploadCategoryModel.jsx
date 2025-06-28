@@ -19,6 +19,22 @@ const UploadCategoryModel = ({close}) => {
         })
     }
 
+    const handleSubmit = (e) =>{
+        e.preventDefault()
+    }
+
+    const handleUploadCategoryImage = (e) =>{
+        const file = e.target.files[0]
+
+        if(!file){
+            return
+        }
+        
+
+
+
+
+    }
    
 
   return (
@@ -31,7 +47,7 @@ const UploadCategoryModel = ({close}) => {
                 </button>
               </div>
 
-              <form action="" className='my-3 grid gap-2'>
+              <form action="" className='my-3 grid gap-2' onSubmit={handleSubmit}>
                 <div className='grid gap-1'>
                     <label id='categoryName'>Name</label>
                     <input
@@ -50,10 +66,20 @@ const UploadCategoryModel = ({close}) => {
                         <div className='border bg-blue-50 h-36 w-full lg:w-36  flex items-center justify-center rounded'>
                         <p className='text-sm text-neutral-400'>No Image</p>
                     </div>
-                    <button disabled={!data.name} className={`
+                    <label htmlFor='uploadCategoryImage'>
+                         <div disabled={!data.name} className={`
                         ${!data.name ? "bg-gray-400" : "bg-primary-200"}
-                        px-4 py-2 rounded
-                        `}>Upload Image</button>
+                        px-4 py-2 rounded cursor-pointer
+                        `}>Upload Image</div>
+                        <input                        
+                        onChange={handleUploadCategoryImage}
+                        type='file'
+                        id='uploadCategoryImage'
+                        className='hidden'
+                        />
+
+                    </label>
+                   
                     </div>
                 </div>
               </form>
