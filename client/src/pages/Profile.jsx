@@ -66,7 +66,7 @@ const Profile = () => {
     }
     
     return (
-    <div>
+    <div className='p-4'>
 
         {
             /**profile upload and display */
