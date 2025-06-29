@@ -105,3 +105,37 @@ export const getProductController = async (req, res) => {
     });
   }
 };
+
+export const getProductByCategory = async(req,res) => {
+  try{
+
+    const {id} = req.body
+
+     if(!id){
+            return response.status(400).json({
+                message : "provide category id",
+                error : true,
+                success : false
+            })
+    }
+
+    const product = await ProductModel.find({
+      category : { $in : id }
+    }).limit(15)
+
+    return res.json({
+      message : "category product list",
+      error : false,
+      success : true,
+      data : product
+    })
+  }
+  catch(error)
+  {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    })
+  }
+}

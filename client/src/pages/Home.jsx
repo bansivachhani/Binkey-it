@@ -4,6 +4,7 @@ import bannerMobile from '../assets/banner-mobile.jpg'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { valideURLConvert } from '../utils/valideURLConvert'
+import CategoryWiseProductDisplay from '../components/CategoryWiseProductDisplay'
 
 const Home = () => {
 
@@ -74,7 +75,20 @@ const Home = () => {
           
         }
       </div>
-      
+
+      {/**display category product */}
+      {
+        categoryData?.map((c,index)=>{
+          return(
+            <CategoryWiseProductDisplay 
+              key={c?._id+"CategorywiseProduct"} 
+              id={c?._id} 
+              name={c?.name}
+            />
+          )
+        })
+      }
+
     </section>
   )
 }
