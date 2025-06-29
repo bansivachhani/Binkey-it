@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "./store/userSlice";
 import Axios from "./utils/Axios";
 import SummaryApi from "./common/SummaryApi";
-import { setAllCategory } from "./store/productSlice";
+import { setAllCategory,setAllSubCategory } from "./store/productSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,9 +41,29 @@ function App() {
     }
   };
 
+  const fetchSubCategory = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getSubCategory,
+      });
+      const { data: responseData } = response;
+
+      if (responseData.success) {
+        dispatch(
+          setAllSubCategory(
+            responseData.data.sort((a, b) => a.name.localeCompare(b.name))
+          )
+        );
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+
   useEffect(() => {
     fetchUser();
     fetchCategory();
+    fetchSubCategory();
   }, []);
 
   return (

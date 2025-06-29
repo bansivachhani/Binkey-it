@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialValue = {
   allCategory: [],
   loadingCategory: false,
-  subCategory: [],
+  allSubCategory: [],
   product: [],
 };
 
