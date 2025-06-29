@@ -3,6 +3,7 @@ import banner from '../assets/banner.jpg'
 import bannerMobile from '../assets/banner-mobile.jpg'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { valideURLConvert } from '../utils/valideURLConvert'
 
 const Home = () => {
 
@@ -21,8 +22,9 @@ const Home = () => {
         return filterData ? true : null
       })
 
-      const url = `/${cat}-${id}/${subcategory.name}-${subcategory._id}`
-      console.log(url)
+      const url = `/${valideURLConvert(cat)}-${id}/${valideURLConvert(subcategory.name)}-${subcategory._id}`
+      navigate(url)
+      //console.log(url)
    }
 
   return (
@@ -72,6 +74,7 @@ const Home = () => {
           
         }
       </div>
+      
     </section>
   )
 }
