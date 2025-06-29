@@ -7,6 +7,9 @@ import toast from 'react-hot-toast'
 import DisplayTable from '../components/DisplayTable'
 import { createColumnHelper } from '@tanstack/react-table'
 import ViewImage from '../components/ViewImage'
+import { MdDelete  } from "react-icons/md";
+import { HiPencil } from "react-icons/hi";
+import EditSubCategory from '../components/EditSubCategory'
 
 
 const SubCategoryPage = () => {
@@ -16,7 +19,10 @@ const SubCategoryPage = () => {
   const [loading,setLoading] = useState(false)
   const columnHelper = createColumnHelper()
   const [ImageURL,setImageURL] = useState("")
-
+  const [openEdit,setOpenEdit] = useState(false)
+  const [editData,setEditData] = useState({
+    _id : ""
+  })
 
 
   const fetchSubCategory = async() =>{
@@ -81,8 +87,25 @@ const SubCategoryPage = () => {
           )
         }
       }),
-      columnHelper.accessor()
-
+      columnHelper.accessor("_id",{
+        header : "Action",
+      cell : ({row})=>{
+        return(
+          <div className='flex items-center justify-center gap-3'>
+              <button onClick={()=>{
+                setOpenEdit(true)
+                setEditData(row.original)
+              }}
+               className='p-2 bg-green-100 rounded-full hover:text-green-600'>
+                  <HiPencil size={20}/>
+              </button>
+              <button className='p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600'>
+                  <MdDelete  size={20}/>
+              </button>
+          </div>
+        )
+      }
+    })
   ]
 
   //console.log("subCategoryData",data)
@@ -114,6 +137,11 @@ const SubCategoryPage = () => {
         {
           ImageURL && 
           <ViewImage url={ImageURL} close={()=>setImageURL("")}/>
+        }
+
+        {
+          openEdit &&
+          <EditSubCategory data={editData} close={()=>setOpenEdit(false)}/>
         }
       </section>
   )
