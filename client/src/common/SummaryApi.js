@@ -48,38 +48,42 @@ const SummaryApi = {
     url: "/api/category/add-category",
     method: "post",
   },
-  uploadImage : {
+  uploadImage: {
     url: "/api/file/upload",
     method: "post",
   },
-  getCategory : {
-    url : '/api/category/get',
-    method : 'get',
+  getCategory: {
+    url: "/api/category/get",
+    method: "get",
   },
-  updateCategory : {
-    url : '/api/category/update',
-    method : 'put',
+  updateCategory: {
+    url: "/api/category/update",
+    method: "put",
   },
-  deleteCategory : {
-    url : '/api/category/delete',
-    method : 'delete',
+  deleteCategory: {
+    url: "/api/category/delete",
+    method: "delete",
   },
-  createSubCategory : {
-    url : "/api/subcategory/create",
-    method : "post",
+  createSubCategory: {
+    url: "/api/subcategory/create",
+    method: "post",
   },
-  getSubCategory : {
-    url : '/api/subcategory/get',
-    method : 'post',
+  getSubCategory: {
+    url: "/api/subcategory/get",
+    method: "post",
   },
-  updateSubCategory : {
-    url : '/api/subcategory/update',
-    method : 'put',
+  updateSubCategory: {
+    url: "/api/subcategory/update",
+    method: "put",
   },
-  deleteSubCategory : {
-    url : '/api/subcategory/delete',
-    method : 'delete'
-  }
+  deleteSubCategory: {
+    url: "/api/subcategory/delete",
+    method: "delete",
+  },
+  createProduct: {
+    url: "/api/product/create",
+    method: "post",
+  },
 };
 
 export default SummaryApi;
