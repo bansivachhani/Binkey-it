@@ -2,11 +2,28 @@ import React from 'react'
 import banner from '../assets/banner.jpg'
 import bannerMobile from '../assets/banner-mobile.jpg'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
 
-   const loadingCategory = useSelector(state => state.product.loadingCategory)
-   const categoryData = useSelector(state => state.product.allCategory)
+  const loadingCategory = useSelector(state => state.product.loadingCategory)
+  const categoryData = useSelector(state => state.product.allCategory)
+  const subCategoryData = useSelector(state => state.product.allSubCategory)
+  const navigate = useNavigate()
+
+   const handleRedirectProductListpage = (id,cat)=>{
+       console.log(id,cat)
+       const subcategory = subCategoryData.find(sub =>{
+        const filterData = sub.category.some(c => {
+          return c._id == id
+        })
+
+        return filterData ? true : null
+      })
+
+      const url = `/${cat}-${id}/${subcategory.name}-${subcategory._id}`
+      console.log(url)
+   }
 
   return (
     <section className='bg-white'>
@@ -33,9 +50,7 @@ const Home = () => {
             return(
               <div className='bg-white rounded p-4 min-h-36 grid gap-2 shadow animate-pulse'>
                  <div className='bg-blue-100 min-h-24 rounded'></div>
-                 <div className='bg-blue-100 h-8 rounded'></div>
-
-                 
+                 <div className='bg-blue-100 h-8 rounded'></div>                 
               </div>
             )
           })
