@@ -3,7 +3,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 
 
 const UploadProduct = () => {
-
+  
   const [data,setData] = useState({
       name : "",
       image : [],
@@ -17,6 +17,9 @@ const UploadProduct = () => {
       more_details : {},
   })
 
+  const [imageLoading,setImageLoading] = useState(false)
+  //const [ViewImageURL,setViewImageURL] = useState("")
+
   const handleChange = (e)=>{
     const { name, value} = e.target 
 
@@ -26,6 +29,26 @@ const UploadProduct = () => {
           [name]  : value
       }
     })
+  }
+
+  const handleUploadImage = async(e)=>{
+     const file = e.target.files[0]
+
+    if(!file){
+      return 
+    }
+    setImageLoading(true)
+    const response = await uploadImage(file)
+    const { data : ImageResponse } = response
+    const imageUrl = ImageResponse.data.url 
+
+    setData((preve)=>{
+      return{
+        ...preve,
+        image : [...preve.image,imageUrl]
+      }
+    })
+    setImageLoading(false)
   }
 
   return (
@@ -68,15 +91,44 @@ const UploadProduct = () => {
               <div>
                 <p>Image</p>
                 <div>
-                    <div className='bg-blue-50 h-24 border rounded flex justify-center items-center'>
-                    <div className='text-center flex justify-center items-center flex-col'>
-                      <FaCloudUploadAlt size={35}/>
-                      <p>Upload Image</p>
-                    </div>
-                   </div>
+                   <label htmlFor='productImage' className='bg-blue-50 h-24 border rounded flex justify-center items-center cursor-pointer'>
+                          <div className='text-center flex justify-center items-center flex-col'>
+                            {
+                              imageLoading ?  <Loading/> : (
+                                <>
+                                   <FaCloudUploadAlt size={35}/>
+                                   <p>Upload Image</p>
+                                </>
+                              )
+                            }
+                          </div>
+                          <input 
+                            type='file'
+                            id='productImage'
+                            className='hidden'
+                            accept='image/*'
+                            onChange={handleUploadImage}
+                          />
+                      </label>
                   {/**display uploaded images */}
-                  <div>
-                    
+                 <div className='flex flex-wrap gap-4'>
+                        {
+                          data.image.map((img,index) =>{
+                              return(
+                                <div key={img+index} className='h-20 mt-1 w-20 min-w-20 bg-blue-50 border relative group'>
+                                  <img
+                                    src={img}
+                                    alt={img}
+                                    className='w-full h-full object-scale-down cursor-pointer' 
+                                    onClick={()=>setViewImageURL(img)}
+                                  />
+                                  <div onClick={()=>handleDeleteImage(index)} className='absolute bottom-0 right-0 p-1 bg-red-600 hover:bg-red-600 rounded text-white hidden group-hover:block cursor-pointer'>
+                                    <MdDelete/>
+                                  </div>
+                                </div>
+                              )
+                          })
+                        }
                   </div>
                 </div>
               </div>

@@ -104,11 +104,13 @@ const SubCategoryPage = () => {
             >
               <HiPencil size={20} />
             </button>
-            <button  onClick={()=>{
-                setOpenDeleteConfirmBox(true)
-                setDeleteSubCategory(row.original)
-              }} 
-             className="p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600">
+            <button
+              onClick={() => {
+                setOpenDeleteConfirmBox(true);
+                setDeleteSubCategory(row.original);
+              }}
+              className="p-2 bg-red-100 rounded-full text-red-500 hover:text-red-600"
+            >
               <MdDelete size={20} />
             </button>
           </div>
@@ -118,25 +120,25 @@ const SubCategoryPage = () => {
   ];
 
   //console.log("subCategoryData",data)
-   const handleDeleteSubCategory = async()=>{
-      try {
-          const response = await Axios({
-              ...SummaryApi.deleteSubCategory,
-              data : deleteSubCategory
-          })
+  const handleDeleteSubCategory = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.deleteSubCategory,
+        data: deleteSubCategory,
+      });
 
-          const { data : responseData } = response
+      const { data: responseData } = response;
 
-          if(responseData.success){
-             toast.success(responseData.message)
-             fetchSubCategory()
-             setOpenDeleteConfirmBox(false)
-             setDeleteSubCategory({_id : ""})
-          }
-      } catch (error) {
-        AxiosToastError(error)
+      if (responseData.success) {
+        toast.success(responseData.message);
+        fetchSubCategory();
+        setOpenDeleteConfirmBox(false);
+        setDeleteSubCategory({ _id: "" });
       }
-  }
+    } catch (error) {
+      AxiosToastError(error);
+    }
+  };
 
   return (
     <section>
@@ -155,7 +157,7 @@ const SubCategoryPage = () => {
       </div>
 
       {openAddSubCategory && (
-        <UploadSubCategoryModel close={() => setOpenAddSubCategory(true)} />
+        <UploadSubCategoryModel close={() => setOpenAddSubCategory(false)} />
       )}
 
       {ImageURL && <ViewImage url={ImageURL} close={() => setImageURL("")} />}
@@ -168,15 +170,13 @@ const SubCategoryPage = () => {
         />
       )}
 
-      {
-          openDeleteConfirmBox && (
-            <ConfirmBox
-              cancel={()=>setOpenDeleteConfirmBox(false)}
-              close={()=>setOpenDeleteConfirmBox(false)}
-              confirm={handleDeleteSubCategory}
-            />
-          )
-        }
+      {openDeleteConfirmBox && (
+        <ConfirmBox
+          cancel={() => setOpenDeleteConfirmBox(false)}
+          close={() => setOpenDeleteConfirmBox(false)}
+          confirm={handleDeleteSubCategory}
+        />
+      )}
     </section>
   );
 };
