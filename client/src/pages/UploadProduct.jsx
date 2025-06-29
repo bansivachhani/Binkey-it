@@ -1,5 +1,9 @@
 import React,{useState} from 'react'
 import { FaCloudUploadAlt } from "react-icons/fa";
+import uploadImage from '../utils/UploadImage';
+import Loading from '../components/Loading';
+import ViewImage from '../components/ViewImage';
+import { MdDelete } from "react-icons/md";
 
 
 const UploadProduct = () => {
@@ -18,7 +22,7 @@ const UploadProduct = () => {
   })
 
   const [imageLoading,setImageLoading] = useState(false)
-  //const [ViewImageURL,setViewImageURL] = useState("")
+  const [ViewImageURL,setViewImageURL] = useState("")
 
   const handleChange = (e)=>{
     const { name, value} = e.target 
@@ -38,6 +42,7 @@ const UploadProduct = () => {
       return 
     }
     setImageLoading(true)
+
     const response = await uploadImage(file)
     const { data : ImageResponse } = response
     const imageUrl = ImageResponse.data.url 
@@ -50,6 +55,17 @@ const UploadProduct = () => {
     })
     setImageLoading(false)
   }
+
+   const handleDeleteImage = async(index)=>{
+      data.image.splice(index,1)
+      setData((preve)=>{
+        return{
+            ...preve
+        }
+      })
+  }
+
+
 
   return (
     <section>
@@ -134,6 +150,11 @@ const UploadProduct = () => {
               </div>
           </form>
         </div>
+          {
+            ViewImageURL && (
+              <ViewImage url={ViewImageURL} close={()=>setViewImageURL("")}/>
+            )
+          }
     </section>
   )
 }
