@@ -38,10 +38,23 @@ export const AddSubCategoryController = async (req, res) => {
 
 export const getSubCategoryController = async(req,res)=>{
     try{
+      const data = await SubCategoryModel.find().sort({name:1}).populate("category")
+
+      return res.json({
+        message: "Sub Category data",
+        success: true,
+        error: false,
+        data:data
+      })
 
     }
     catch(error)
     {
+      return res.status(500).json({
+        message: error.message || error,
+        error: true,
+        success: false,
+      })
         
     }
 }
