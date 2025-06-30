@@ -85,7 +85,7 @@ const ProductListPage = () => {
                 to={link}
                 key={s._id}
                 className={`w-full p-2 lg:flex items-center lg:w-full lg:h-16 box-border lg:gap-4 border-b 
-                  hover:bg-green-100 cursor-pointer
+                  hover:bg-green-200 cursor-pointer
                   ${subCategoryId === s._id ? "bg-green-100" : ""}
                 `}
               >
