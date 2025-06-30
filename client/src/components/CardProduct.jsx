@@ -37,7 +37,7 @@ const CardProduct = ({data}) => {
       </div>
           
         <div className=''>
-            <button className='bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded'>
+            <button className='bg-green-600 hover:bg-green-700 text-white px-2 lg:px-4 py-1 rounded'>
                 Add
             </button>
         </div>
