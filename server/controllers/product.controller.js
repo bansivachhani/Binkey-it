@@ -189,11 +189,11 @@ export const getProductByCategoryAndSubCategory = async (req, res) => {
   }
 };
 
-export const getProductDetails = async(req,res)=>{
-  try{
-    const {productId} = req.body 
+export const getProductDetails = async (req, res) => {
+  try {
+    const { productId } = req.body;
 
-    const product = await ProductModel.findOne({_id: productId})
+    const product = await ProductModel.findOne({ _id: productId });
 
     return res.json({
       message: "Product details",
@@ -201,29 +201,27 @@ export const getProductDetails = async(req,res)=>{
       success: true,
       data: product,
     });
-
-  }
-  catch(error){
+  } catch (error) {
     return res.status(500).json({
       message: error.message || error,
       error: true,
       success: false,
     });
   }
-}
+};
 
 export const updateProductDetails = async (req, res) => {
-  try{
-    const {_id} = req.body;
+  try {
+    const { _id } = req.body;
 
-    if(!_id){
+    if (!_id) {
       return res.status(400).json({
         message: "Product id is required",
         error: true,
         success: false,
       });
     }
-    
+
     const updateProduct = await ProductModel.findByIdAndUpdate(
       _id,
       { ...req.body },
@@ -235,15 +233,40 @@ export const updateProductDetails = async (req, res) => {
       error: false,
       success: true,
       data: updateProduct,
-    })
-
-  }
-  catch(error)
-  {
+    });
+  } catch (error) {
     return res.status(500).json({
       message: error.message || error,
       error: true,
       success: false,
     });
   }
-}
+};
+
+export const deleteProductDetails = async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    if (!_id) {
+      return res.status(400).json({
+        message: "Product id is required",
+        error: true,
+        success: false,
+      });
+    }
+
+    const deleteProduct = await ProductModel.deleteOne({ _id: _id });
+    return res.json({
+      message: "Product deleted successfully",
+      error: false,
+      success: true,
+      data: deleteProduct,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};
