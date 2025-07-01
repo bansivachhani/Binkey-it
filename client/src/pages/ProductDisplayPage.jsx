@@ -113,7 +113,27 @@ const ProductDisplayPage = () => {
             </button>
           </div>
         </div>
-      </div>
+        <div className='my-4  hidden lg:grid gap-3 '>
+                <div>
+                    <p className='font-semibold'>Description</p>
+                    <p className='text-base'>{data.description}</p>
+                </div>
+                <div>
+                    <p className='font-semibold'>Unit</p>
+                    <p className='text-base'>{data.unit}</p>
+                </div>
+                {
+                  data?.more_details && Object.keys(data?.more_details).map((element,index)=>{
+                    return(
+                      <div>
+                          <p className='font-semibold'>{element}</p>
+                          <p className='text-base'>{data?.more_details[element]}</p>
+                      </div>
+                    )
+                  })
+                }
+            </div>
+        </div>
 
 
       <div className='p-4 lg:pl-7 text-base lg:text-lg'>
@@ -140,6 +160,19 @@ const ProductDisplayPage = () => {
                 
               </div>
             </div>
+
+             {
+                data.stock === 0 ? (
+                  <p className='text-lg text-red-500 my-2'>Out of Stock</p>
+                ) 
+                : (
+                  <p className='text-lg text-green-500 my-2'>In Stock</p>
+                  // // <button className='my-4 px-4 py-1 bg-green-600 hover:bg-green-700 text-white rounded'>Add</button>
+                  // <div className='my-4'>
+                  //   <AddToCartButton data={data}/>
+                  // </div>
+                )
+              }
             <button className="my-4 px-4 py-1 bg-green-600 hover:bg-green-700 rounded text-white">Add</button>
 
             <h2 className='font-semibold'>Why shop from binkeyit? </h2>

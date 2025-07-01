@@ -211,3 +211,39 @@ export const getProductDetails = async(req,res)=>{
     });
   }
 }
+
+export const updateProductDetails = async (req, res) => {
+  try{
+    const {_id} = req.body;
+
+    if(!_id){
+      return res.status(400).json({
+        message: "Product id is required",
+        error: true,
+        success: false,
+      });
+    }
+    
+    const updateProduct = await ProductModel.findByIdAndUpdate(
+      _id,
+      { ...req.body },
+      { new: true }
+    );
+
+    return res.json({
+      message: "Product updated successfully",
+      error: false,
+      success: true,
+      data: updateProduct,
+    })
+
+  }
+  catch(error)
+  {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}

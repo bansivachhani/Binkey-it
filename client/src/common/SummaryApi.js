@@ -1,5 +1,8 @@
 import { updateCategoryController } from "../../../server/controllers/category.controller";
-import { getProductByCategory } from "../../../server/controllers/product.controller";
+import {
+  getProductByCategory,
+  updateProductDetails,
+} from "../../../server/controllers/product.controller";
 import { logout } from "../store/userSlice";
 
 export const baseURL = "http://localhost:8080";
@@ -100,6 +103,10 @@ const SummaryApi = {
   getProductDetails: {
     url: "/api/product/get-product-details",
     method: "post",
+  },
+  updateProductDetails: {
+    url: "/api/product/update-product-details",
+    method: "put",
   },
 };
 
