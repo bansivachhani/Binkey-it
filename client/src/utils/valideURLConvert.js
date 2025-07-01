@@ -1,5 +1,7 @@
 export const valideURLConvert = (name) => {
-    const url = name.toString().replaceAll(" ","-").replaceAll(",","-").replaceAll("&","-")
-
-    return url
-}
+  try {
+    return name?.toString().replaceAll(" ", "-").replaceAll(",", "-").replaceAll("&", "-") || "unknown";
+  } catch {
+    return "unknown";
+  }
+};
