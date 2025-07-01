@@ -14,7 +14,7 @@ const Home = () => {
   const navigate = useNavigate()
 
    const handleRedirectProductListpage = (id,cat)=>{
-       console.log(id,cat)
+      // console.log(id,cat)
        const subcategory = subCategoryData.find(sub =>{
         const filterData = sub.category.some(c => {
           return c._id == id

@@ -21,7 +21,7 @@ const Header = () => {
 
   // console.log(isMobile)
   // console.log(location)
-  console.log(isSearchPage);
+  //console.log(isSearchPage);
 
   const redirectToLoginPage = () => {
     navigate("/login");

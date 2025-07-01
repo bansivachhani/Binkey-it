@@ -5,6 +5,7 @@ import {
   getProductController,
   getProductByCategory,
   getProductByCategoryAndSubCategory,
+  getProductDetails
 } from "../controllers/product.controller.js";
 
 const productRouter = Router();
@@ -16,5 +17,6 @@ productRouter.post(
   "/get-product-by-category-and-subcategory",
   getProductByCategoryAndSubCategory
 );
+productRouter.post("/get-product-details",getProductDetails)
 
 export default productRouter;
