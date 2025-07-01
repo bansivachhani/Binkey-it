@@ -270,3 +270,49 @@ export const deleteProductDetails = async (req, res) => {
     });
   }
 };
+
+export const searchProduct = async (req, res) => {
+  try {
+    const { search } = req.body;
+
+    let page = req.body.page || 1;
+    let limit = req.body.limit || 10;
+
+
+    const query = search
+      ? {
+          $text: {
+            $search: search,
+          },
+        }
+      : {};
+
+    const skip = (page - 1) * limit;
+
+    const [data, dataCount] = await Promise.all([
+      ProductModel.find(query)
+        .sort({ name: 1 })
+        .skip(skip)
+        .limit(limit)
+        .populate("category subCategory"),
+      ProductModel.countDocuments(query),
+    ]);
+
+    return res.json({
+      message: "Search product data",
+      error: false,
+      success: true,
+      totalCount: dataCount,
+      totalPage: Math.ceil(dataCount / limit),
+      data: data,
+      page: page,
+      limit: limit,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+};

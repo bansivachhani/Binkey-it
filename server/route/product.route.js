@@ -8,6 +8,7 @@ import {
   getProductDetails,
   updateProductDetails,
   deleteProductDetails,
+  searchProduct,
 } from "../controllers/product.controller.js";
 import { admin } from "../middleware/Admin.js";
 
@@ -23,5 +24,6 @@ productRouter.post(
 productRouter.post("/get-product-details", getProductDetails);
 productRouter.put("/update-product-details", auth, admin, updateProductDetails);
 productRouter.delete("/delete-product", auth, admin, deleteProductDetails);
+productRouter.post("/search-product", searchProduct);
 
 export default productRouter;
