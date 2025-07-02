@@ -22,7 +22,7 @@ export const addToCartItemController = async (req, res) => {
 
         if(checkItemCart) {
             return res.status(400).json({
-                message: "Product already exists in cart",
+                message: "Item already exists in cart",
                 success: false,
                 error: true
             });
@@ -41,7 +41,7 @@ export const addToCartItemController = async (req, res) => {
         })
 
         return res.json({
-            message: "Product added to cart successfully",
+            message: "Item added to cart successfully",
             success: true,
             error: false,
             data: save
