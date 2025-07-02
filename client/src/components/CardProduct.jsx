@@ -3,10 +3,16 @@ import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
 import { Link } from "react-router-dom";
 import { valideURLConvert } from "../utils/valideURLConvert";
 import { pricewithDiscount } from "../utils/pricewithDiscount";
+import SummaryApi from "../common/SummaryApi";
 
 const CardProduct = ({ data }) => {
   const url = `/product/${valideURLConvert(data.name)}-${data._id}`;
   const [loading, setLoading] = useState(false);
+
+  const handleADDToCart = async (e) => {
+      e.preventDefault()
+      e.stopPropagation();
+  }
 
   return (
     <Link
@@ -54,7 +60,7 @@ const CardProduct = ({ data }) => {
             data.stock == 0 ? (
               <p className='text-red-500 text-sm text-center'>Out of stock</p>
             ) : (
-              <p className='text-green-500 text-sm text-center'>In stock</p>
+              <button onClick={handleADDToCart} className='text-green-500 text-sm text-center'>Add</button>
             )
           }
             
