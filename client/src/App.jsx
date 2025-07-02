@@ -9,7 +9,11 @@ import { useDispatch } from "react-redux";
 import { setUserDetails } from "./store/userSlice";
 import Axios from "./utils/Axios";
 import SummaryApi from "./common/SummaryApi";
-import { setAllCategory,setAllSubCategory,setLoadingCategory } from "./store/productSlice";
+import {
+  setAllCategory,
+  setAllSubCategory,
+  setLoadingCategory,
+} from "./store/productSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,7 +30,7 @@ function App() {
 
   const fetchCategory = async () => {
     try {
-      dispatch(setLoadingCategory(true))
+      dispatch(setLoadingCategory(true));
       const response = await Axios({
         ...SummaryApi.getCategory,
       });
@@ -38,7 +42,7 @@ function App() {
       }
     } catch (error) {
     } finally {
-      dispatch(setLoadingCategory(false))
+      dispatch(setLoadingCategory(false));
     }
   };
 
@@ -61,10 +65,27 @@ function App() {
     }
   };
 
+  const fetchCartItem = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getCartItem,
+      });
+
+      const { data: responseData } = response;
+      if (responseData.success) {
+        console.log("fetch cart item",responseData);
+        //dispatch(setCartItem(responseData.data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchUser();
     fetchCategory();
     fetchSubCategory();
+    fetchCartItem();
   }, []);
 
   return (
