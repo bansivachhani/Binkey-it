@@ -7,6 +7,8 @@ import AxiosToastError from '../utils/AxiosToastError'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useLocation } from 'react-router-dom'
 import CardProduct from '../components/CardProduct'
+import noDataImage from '../assets/nothing here yet.webp'
+
 
 const SearchPage = () => {
 
@@ -43,7 +45,7 @@ const SearchPage = () => {
               })
             }
             setTotalPage(responseData.totalPage)
-            console.log(responseData)
+           // console.log(responseData)
         }
     } catch (error) {
         AxiosToastError(error)
@@ -56,7 +58,7 @@ const SearchPage = () => {
     fetchData()
   },[page,searchText])
 
-  console.log("page",page)
+  //console.log("page",page)
 
   const handleFetchMore = ()=>{
     if(totalPage > page){
@@ -96,6 +98,19 @@ const SearchPage = () => {
       }
       </div>
       </InfiniteScroll>
+
+      {
+                //no data 
+                !data[0] && !loading && (
+                  <div className='flex flex-col justify-center items-center w-full mx-auto'>
+                    <img
+                      src={noDataImage} 
+                      className='w-full h-full max-w-xs max-h-xs block'
+                    />
+                    <p className='font-semibold my-2'>No Data found</p>
+                  </div>
+                )
+              }
 
 
        </div>
