@@ -15,6 +15,19 @@ export const addToCartItemController = async (req, res) => {
             });
         }
 
+         const checkItemCart = await CartProductModel.findOne({
+            userId : userId,
+            productId : productId
+        })
+
+        if(checkItemCart) {
+            return res.status(400).json({
+                message: "Product already exists in cart",
+                success: false,
+                error: true
+            });
+        }
+
         const cartItem = new CartProductModel({
             quantity: 1,
             userId: userId,
