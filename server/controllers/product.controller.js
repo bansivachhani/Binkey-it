@@ -273,11 +273,15 @@ export const deleteProductDetails = async (req, res) => {
 
 export const searchProduct = async (req, res) => {
   try {
-    const { search } = req.body;
+    let { search, page, limit } = req.body;
 
-    let page = req.body.page || 1;
-    let limit = req.body.limit || 10;
+    if (!page) {
+      page = 1;
+    }
 
+    if (!limit) {
+      limit = 10;
+    }
 
     const query = search
       ? {
