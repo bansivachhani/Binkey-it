@@ -125,7 +125,7 @@ const ProductDisplayPage = () => {
                 {
                   data?.more_details && Object.keys(data?.more_details).map((element,index)=>{
                     return(
-                      <div>
+                      <div key={element + index}>
                           <p className='font-semibold'>{element}</p>
                           <p className='text-base'>{data?.more_details[element]}</p>
                       </div>
