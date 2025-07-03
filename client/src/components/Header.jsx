@@ -17,7 +17,7 @@ const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state?.user);
   const [openUserMenu, setOpenUserMenu] = useState(false);
-  const cartItem = useSelector(state => state.cartItem.cart)
+  const cartItem = useSelector((state) => state.cartItem.cart);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalQty, setTotalQty] = useState(0);
 
@@ -45,13 +45,19 @@ const Header = () => {
   };
 
   //total item and total price
-  useEffect(()=>{
-    const qty = cartItem.reduce((preve,curr) => {
-      return preve + curr.quantity
-    },0);
+  useEffect(() => {
+    const qty = cartItem.reduce((preve, curr) => {
+      return preve + curr.quantity;
+    }, 0);
     setTotalQty(qty);
     //console.log("qty",qty)
-  },[cartItem]);
+
+    const tPrice = cartItem.reduce((preve, curr) => {
+      return preve + ( curr.productId.price * curr.quantity )
+    }, 0);
+    setTotalPrice(tPrice);
+    //console.log("tPrice", tPrice);
+  }, [cartItem]);
 
   return (
     <header className="h-24 lg:h-20 lg:shadow-md sticky top-0 z-40 flex flex-col justify-center gap-1 bg-white">
@@ -126,17 +132,14 @@ const Header = () => {
                   <BsCart4 size={26} />
                 </div>
                 <div className="font-semibold">
-                  {
-                    cartItem[0] ? (
-                      <div>
-                          <p>{totalQty} Items</p>
-                          <p>{DisplayPriceInRupees(totalPrice)} Price</p>
-                       </div> 
-                    ) : (
-                       <p>My Cart</p>
-                    )
-                  }
-                               
+                  {cartItem[0] ? (
+                    <div>
+                      <p>{totalQty} Items</p>
+                      <p>{DisplayPriceInRupees(totalPrice)}</p>
+                    </div>
+                  ) : (
+                    <p>My Cart</p>
+                  )}
                 </div>
               </button>
             </div>
