@@ -10,6 +10,7 @@ import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import UserMenu from "./UserMenu";
 import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
 import { useGlobalContext } from "../provider/GlobalProvider";
+import DisplayCartItem from "./DisplayCartItem";
 
 const Header = () => {
   const [isMobile] = useMobile();
@@ -22,6 +23,7 @@ const Header = () => {
   // const [totalPrice, setTotalPrice] = useState(0);
   // const [totalQty, setTotalQty] = useState(0);
   const {totalPrice, totalQty} = useGlobalContext()
+  const [openCartSection,setOpenCartSection] = useState(false)
 
   //console.log("cartItem", cartItem);
 
@@ -128,7 +130,7 @@ const Header = () => {
                   Login{" "}
                 </button>
               )}
-              <button className="flex items-center gap-2 bg-green-700 hover:bg-green-800 px-3 py-2 rounded-lg text-white">
+              <button onClick={()=>setOpenCartSection(true)} className="flex items-center gap-2 bg-green-700 hover:bg-green-800 px-3 py-2 rounded-lg text-white">
                 {/**add to card icons */}
                 <div className="animate-bounce">
                   <BsCart4 size={26} />
@@ -152,6 +154,11 @@ const Header = () => {
       <div className="container mx-auto px-2 lg:hidden">
         <Search />
       </div>
+      {
+        openCartSection && (
+          <DisplayCartItem close={()=>setOpenCartSection(false)}/>
+        )
+      }
     </header>
   );
 };
