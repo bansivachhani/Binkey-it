@@ -14,6 +14,8 @@ import {
   setAllSubCategory,
   setLoadingCategory,
 } from "./store/productSlice";
+import { handleAddItemCart } from "./store/cartProduct";
+import GlobalProvider from "./provider/GlobalProvider";
 
 function App() {
   const dispatch = useDispatch();
@@ -65,38 +67,22 @@ function App() {
     }
   };
 
-  const fetchCartItem = async () => {
-    try {
-      const response = await Axios({
-        ...SummaryApi.getCartItem,
-      });
-
-      const { data: responseData } = response;
-      if (responseData.success) {
-        console.log("fetch cart item",responseData);
-        //dispatch(setCartItem(responseData.data));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     fetchUser();
     fetchCategory();
     fetchSubCategory();
-    fetchCartItem();
+    // fetchCartItem();
   }, []);
 
   return (
-    <>
+    <GlobalProvider>
       <Header />
       <main className="min-h-[78vh]">
         <Outlet />
       </main>
       <Footer />
       <Toaster />
-    </>
+    </GlobalProvider>
   );
 }
 
