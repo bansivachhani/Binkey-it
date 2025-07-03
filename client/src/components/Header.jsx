@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import UserMenu from "./UserMenu";
 import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
+import { useGlobalContext } from "../provider/GlobalProvider";
 
 const Header = () => {
   const [isMobile] = useMobile();
@@ -20,6 +21,7 @@ const Header = () => {
   const cartItem = useSelector((state) => state.cartItem.cart);
   // const [totalPrice, setTotalPrice] = useState(0);
   // const [totalQty, setTotalQty] = useState(0);
+  const {totalPrice, totalQty} = useGlobalContext()
 
   //console.log("cartItem", cartItem);
 

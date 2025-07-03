@@ -17,10 +17,12 @@ import {
 import { handleAddItemCart } from "./store/cartProduct";
 import GlobalProvider from "./provider/GlobalProvider";
 import { FaCartShopping } from "react-icons/fa6";
+import CartMobileLink from "./components/CartMobile";
 
 
 function App() {
   const dispatch = useDispatch();
+  
 
   const fetchUser = async () => {
     const userData = await fetchUserDetails();
@@ -84,22 +86,9 @@ function App() {
       </main>
       <Footer />
       <Toaster />
-      <div className="sticky bottom-4 p-2">
-        <div className="bg-green-600 p-2 rounded">
-          <div>
-              <div>
-                <FaCartShopping/>
-              </div>
-              <div>
-                <p></p>
-              </div>
-          </div>
-          <div>
-
-          </div>
-
-        </div>
-      </div>
+      
+       <CartMobileLink/>
+      
     </GlobalProvider>
   );
 }
