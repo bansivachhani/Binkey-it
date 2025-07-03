@@ -4,6 +4,7 @@ import Axios from "../utils/Axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { handleAddItemCart } from "../store/cartProduct";
+import AxiosToastError from "../utils/AxiosToastError";
 
 
 export const GlobalContext = createContext(null);
@@ -30,6 +31,35 @@ const GlobalProvider = ({children}) =>{
         }
       };
 
+    const updateCartItem = async(id,qty)=>{
+      try{
+        const response = await Axios({
+          ...SummaryApi.updateCartItemQty,
+          data : {
+            _id : id,
+            qty : qty
+          }
+        })
+
+        const {data: responseData} = response;
+        if(responseData.success)
+        {
+        toast.success(responseData.message)
+          fetchCartItem();
+          //return responseData;
+        }
+      }
+      catch(error)
+      {
+        AxiosToastError(error);
+        return error
+      }
+    }
+
+    // const deleteCartItem = async(id,qty)=>{
+
+    // }
+
     useEffect(() => {
         fetchCartItem();
     }, []);
@@ -37,7 +67,11 @@ const GlobalProvider = ({children}) =>{
 
 
     return (
-        <GlobalContext.Provider value={{fetchCartItem}}> 
+        <GlobalContext.Provider value={{fetchCartItem,
+          updateCartItem,
+          //deleteCartItem,
+
+        }}> 
             {children}
         </GlobalContext.Provider>
     )

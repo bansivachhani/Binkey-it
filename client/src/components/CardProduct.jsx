@@ -8,45 +8,13 @@ import AxiosToastError from "../utils/AxiosToastError";
 import Axios from "../utils/Axios"
 import toast from "react-hot-toast";
 import { useGlobalContext } from "../provider/GlobalProvider";
+import AddToCartButton from "./AddToCartButton";
 
 const CardProduct = ({ data }) => {
   const url = `/product/${valideURLConvert(data.name)}-${data._id}`;
   const [loading, setLoading] = useState(false);
-  const {fetchCartItem} = useGlobalContext();
-
-  const handleADDToCart = async (e) => {
-      e.preventDefault()
-      e.stopPropagation();
-
-      try{
-        setLoading(true)
-
-        const response = await Axios({
-          ...SummaryApi.addToCart,
-          data: {
-            productId: data?._id
-          }
-        })
-
-        const {data:responseData} = response;
-
-        if(responseData.success) {
-          toast.success(responseData.message);
-          if(fetchCartItem) {
-            fetchCartItem();
-          }
-        }
-
-
-
-      }
-      catch(error) {
-        AxiosToastError(error);
-      }
-      finally {
-        setLoading(false)
-      }
-  }
+  
+  
 
   return (
     <Link
@@ -94,7 +62,7 @@ const CardProduct = ({ data }) => {
             data.stock == 0 ? (
               <p className='text-red-500 text-sm text-center'>Out of stock</p>
             ) : (
-              <button onClick={handleADDToCart} className='bg-green-500 text-white rounded px-2 py-1  border hover:bg-green-700 text-sm text-center'>Add</button>
+              <AddToCartButton data={data}/>
             )
           }
             
