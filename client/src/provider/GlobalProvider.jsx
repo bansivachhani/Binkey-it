@@ -57,9 +57,31 @@ const GlobalProvider = ({children}) =>{
       }
     }
 
-    // const deleteCartItem = async(id,qty)=>{
+    const deleteCartItem = async(cartId)=>{
+      try{
 
-    // }
+        const response = await Axios({
+          ...SummaryApi.deleteCartItem,
+          data : {
+            _id : cartId
+          }
+        })
+        const {data: responseData} = response;
+        if(responseData.success)
+        {
+          toast.success(responseData.message);
+          fetchCartItem();
+          //return responseData;
+        }
+      }
+      catch(error)
+      {
+        AxiosToastError(error);
+        
+      }
+    }
+
+   
 
     useEffect(() => {
         fetchCartItem();
@@ -70,7 +92,7 @@ const GlobalProvider = ({children}) =>{
     return (
         <GlobalContext.Provider value={{fetchCartItem,
           updateCartItem,
-          //deleteCartItem,
+          deleteCartItem,
 
         }}> 
             {children}

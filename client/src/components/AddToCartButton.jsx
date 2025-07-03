@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 import { FaMinus, FaPlus } from "react-icons/fa6";
 
 const AddToCartButton = ({data}) => {
-    const {fetchCartItem,updateCartItem} = useGlobalContext()
+    const {fetchCartItem,updateCartItem,deleteCartItem} = useGlobalContext()
     const [loading, setLoading] = useState (false)
     const cartItem = useSelector(state => state.cartItem.cart)
     const [isAvailableCart, setIsAvailableCart] = useState(false)
@@ -75,15 +75,15 @@ const AddToCartButton = ({data}) => {
     const decreaseQty = async(e) => {
         e.preventDefault()
         e.stopPropagation()
-        // if(qty === 1){
-        //     deleteCartItem(cartItemDetails?._id)
-        // }else{
-        //     const response = await updateCartItem(cartItemDetails?._id,qty-1)
+        if(qty === 1){
+            deleteCartItem(cartItemDetails?._id)
+        }else{
+            const response = await updateCartItem(cartItemDetails?._id,qty-1)
 
-        //     if(response.success){
-        //         toast.success("Item remove")
-        //     }
-        // }
+            if(response.success){
+                toast.success("Item remove")
+            }
+        }
     }
     
 
