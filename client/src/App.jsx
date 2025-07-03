@@ -16,6 +16,8 @@ import {
 } from "./store/productSlice";
 import { handleAddItemCart } from "./store/cartProduct";
 import GlobalProvider from "./provider/GlobalProvider";
+import { FaCartShopping } from "react-icons/fa6";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -85,10 +87,15 @@ function App() {
       <div className="sticky bottom-4 p-2">
         <div className="bg-green-600 p-2 rounded">
           <div>
-
+              <div>
+                <FaCartShopping/>
+              </div>
+              <div>
+                <p></p>
+              </div>
           </div>
           <div>
-            
+
           </div>
 
         </div>

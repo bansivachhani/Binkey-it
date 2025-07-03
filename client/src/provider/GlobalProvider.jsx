@@ -15,6 +15,8 @@ export const useGlobalContext = () => useContext(GlobalContext);
 const GlobalProvider = ({children}) =>{
 
     const dispatch = useDispatch()
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalQty, setTotalQty] = useState(0);
 
     const fetchCartItem = async () => {
         try {
@@ -86,6 +88,21 @@ const GlobalProvider = ({children}) =>{
     useEffect(() => {
         fetchCartItem();
     }, []);
+
+    useEffect(() => {
+        const qty = cartItem.reduce((preve, curr) => {
+          return preve + curr.quantity;
+        }, 0);
+        setTotalQty(qty);
+        //console.log("qty",qty)
+    
+        const tPrice = cartItem.reduce((preve, curr) => {
+          return preve + ( curr.productId.price * curr.quantity )
+        }, 0);
+        setTotalPrice(tPrice);
+        //console.log("tPrice", tPrice);
+      }, [cartItem]);
+    
 
 
 
