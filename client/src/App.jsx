@@ -82,6 +82,17 @@ function App() {
       </main>
       <Footer />
       <Toaster />
+      <div className="sticky bottom-4 p-2">
+        <div className="bg-green-600 p-2 rounded">
+          <div>
+
+          </div>
+          <div>
+            
+          </div>
+
+        </div>
+      </div>
     </GlobalProvider>
   );
 }
