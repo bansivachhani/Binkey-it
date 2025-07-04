@@ -41,7 +41,7 @@ export const getAddressController = async (req, res) => {
     try{
         const userId = req.userId; // Assuming user ID is stored in req.user
 
-        const data = await AddressModel.find({userId :userId })
+        const data = await AddressModel.find({userId :userId }).sort({createdAt : -1})
 
         return res.json({
             message: "Address fetched successfully",

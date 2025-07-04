@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DisplayPriceInRupees } from "../utils/DisplayPriceInRupees";
 import SummaryApi from "../common/SummaryApi";
@@ -18,6 +18,11 @@ const CheckoutPage = () => {
     fetchOrder,
   } = useGlobalContext();
   const [openAddress, setOpenAddress] = useState(false);
+  const addressList = useSelector((state) => state.addresses.addressList);
+  const [selectAddress, setSelectAddress] = useState(0)
+
+
+  //console.log("addressList", addressList);
 
   return (
     <section className="bg-blue-50">
@@ -25,13 +30,35 @@ const CheckoutPage = () => {
         <div className="w-full">
           {/**address */}
           <h3 className="text-lg font-semibold">Choose your address</h3>
-          <div className="bg-white p-2 grid gap-4"></div>
+          <div className="bg-white p-2 grid gap-4">
+           {
+              addressList.map((address, index) => {
+                return (
+                  <label htmlFor={"address" + index} className={!address.status && "hidden"}>
+                    <div className='border rounded p-3 flex gap-3 hover:bg-blue-50'>
+                      <div>
+                        <input id={"address" + index} type='radio' value={index} onChange={(e) => setSelectAddress(e.target.value)} name='address' />
+                      </div>
+                      <div>
+                        <p>{address.address_line}</p>
+                        <p>{address.city}</p>
+                        <p>{address.state}</p>
+                        <p>{address.country} - {address.pincode}</p>
+                        <p>{address.mobile}</p>
+                      </div>
+                    </div>
+                  </label>
+                )
+              })
+            }
+            
           <div
             onClick={() => setOpenAddress(true)}
             className="h-16 bg-blue-50 border-2 border-dashed flex justify-center items-center cursor-pointer"
           >
             Add address
           </div>
+        </div>
         </div>
 
         <div className="w-full max-w-md bg-white py-4 px-2">
