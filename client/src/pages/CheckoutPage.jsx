@@ -9,6 +9,7 @@ import AxiosToastError from "../utils/AxiosToastError";
 import { useGlobalContext } from "../provider/GlobalProvider";
 import AddAddress from "../components/AddAddress";
 import toast from "react-hot-toast";
+import {loadStripe} from '@stripe/stripe-js'
 
 const CheckoutPage = () => {
   const {
@@ -58,6 +59,37 @@ const CheckoutPage = () => {
            } catch (error) {
         AxiosToastError(error)
       }
+  }
+
+   const handleOnlinePayment = async()=>{
+    try {
+        toast.loading("Loading...")
+        const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY
+        const stripePromise = await loadStripe(stripePublicKey)
+       
+        const response = await Axios({
+            ...SummaryApi.payment_url,
+            data : {
+              list_items : cartItemsList,
+              addressId : addressList[selectAddress]?._id,
+              subTotalAmt : totalPrice,
+              totalAmt :  totalPrice,
+            }
+        })
+
+        const { data : responseData } = response
+
+        stripePromise.redirectToCheckout({ sessionId : responseData.id })
+        
+        if(fetchCartItem){
+          fetchCartItem()
+        }
+        if(fetchOrder){
+          fetchOrder()
+        }
+    } catch (error) {
+        AxiosToastError(error)
+    }
   }
 
   return (
@@ -127,7 +159,7 @@ const CheckoutPage = () => {
           <div className="w-full flex flex-col gap-4">
             <button
               className="py-2 px-4 bg-green-600 hover:bg-green-700 rounded text-white font-semibold"
-              // onClick={handleOnlinePayment}
+               onClick={handleOnlinePayment}
             >
               Online Payment
             </button>
