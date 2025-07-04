@@ -36,3 +36,27 @@ export const addAddressController = async (req, res) => {
     });
   }
 };
+
+export const getAddressController = async (req, res) => {
+    try{
+        const userId = req.userId; // Assuming user ID is stored in req.user
+
+        const data = await AddressModel.find({userId :userId })
+
+        return res.json({
+            message: "Address fetched successfully",
+            success: true,
+            error: false,
+            data: data,
+        });
+
+    }
+    catch(error){
+        return res.status(500).json({
+            message: error.message || error,
+            success: false,
+            error: true,
+        });
+    }
+
+}

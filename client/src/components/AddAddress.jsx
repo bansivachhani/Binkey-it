@@ -15,8 +15,34 @@ const AddAddress = ({close}) => {
     const { register, handleSubmit,reset } = useForm()
     const { fetchAddress } = useGlobalContext()
 
-    const onSubmit = (data)=>{
+    const onSubmit = async(data)=>{
         console.log("data",data)
+        try{
+            const response = await Axios({
+                ...SummaryApi.createAddress,
+                data: {
+                    address_line: data.addressline,
+                    city: data.city,
+                    state: data.state,                    
+                    country: data.country,
+                    pincode: data.pincode,
+                    mobile: data.mobile
+                }
+            })
+
+            const {data: responseData} = response
+
+            if(responseData.success){
+                toast.success(responseData.message)
+                close()
+                reset()
+                fetchAddress() // Fetch updated address list
+            }
+
+        }
+        catch(error){
+            AxiosToastError(error)
+        }
     }
 
 
