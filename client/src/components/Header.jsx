@@ -135,7 +135,7 @@ const Header = () => {
                 <div className="animate-bounce">
                   <BsCart4 size={26} />
                 </div>
-                <div className="font-semibold">
+                <div className="font-semibold text-sm">
                   {cartItem[0] ? (
                     <div>
                       <p>{totalQty} Items</p>

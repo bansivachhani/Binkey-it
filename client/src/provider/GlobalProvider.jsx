@@ -1,4 +1,4 @@
-import { createContext,useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import SummaryApi from "../common/SummaryApi";
 import Axios from "../utils/Axios";
 import { useEffect } from "react";
@@ -8,119 +8,116 @@ import AxiosToastError from "../utils/AxiosToastError";
 import { toast } from "react-hot-toast";
 import { pricewithDiscount } from "../utils/pricewithDiscount";
 
-
 export const GlobalContext = createContext(null);
 
 export const useGlobalContext = () => useContext(GlobalContext);
 
-const GlobalProvider = ({children}) =>{
+const GlobalProvider = ({ children }) => {
+  const dispatch = useDispatch();
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalQty, setTotalQty] = useState(0);
+  const cartItem = useSelector((state) => state.cartItem.cart);
+  const [notDiscountTotalPrice, setNotDiscountTotalPrice] = useState(0);
 
-    const dispatch = useDispatch()
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [totalQty, setTotalQty] = useState(0);
-    const cartItem = useSelector(state => state.cartItem.cart)
+  const fetchCartItem = async () => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.getCartItem,
+      });
 
-    const fetchCartItem = async () => {
-        try {
-          const response = await Axios({
-            ...SummaryApi.getCartItem,
-          });
-    
-          const { data: responseData } = response;
-          if (responseData.success) {
-            //console.log("fetch cart item",responseData);
-            dispatch(handleAddItemCart(responseData.data));
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-    const updateCartItem = async(id,qty)=>{
-      try{
-        const response = await Axios({
-          ...SummaryApi.updateCartItemQty,
-          data : {
-            _id : id,
-            qty : qty
-          }
-        })
-
-        const {data: responseData} = response;
-        if(responseData.success)
-        {
-        toast.success(responseData.message)
-          fetchCartItem();
-          //return responseData;
-        }
+      const { data: responseData } = response;
+      if (responseData.success) {
+        //console.log("fetch cart item",responseData);
+        dispatch(handleAddItemCart(responseData.data));
       }
-      catch(error)
-      {
-        AxiosToastError(error);
-        return error
-      }
+    } catch (error) {
+      console.log(error);
     }
+  };
 
-    const deleteCartItem = async(cartId)=>{
-      try{
+  const updateCartItem = async (id, qty) => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.updateCartItemQty,
+        data: {
+          _id: id,
+          qty: qty,
+        },
+      });
 
-        const response = await Axios({
-          ...SummaryApi.deleteCartItem,
-          data : {
-            _id : cartId
-          }
-        })
-        const {data: responseData} = response;
-        if(responseData.success)
-        {
-          toast.success(responseData.message);
-          fetchCartItem();
-          //return responseData;
-        }
-      }
-      catch(error)
-      {
-        AxiosToastError(error);
-        
-      }
-    }
-
-   
-
-    useEffect(() => {
+      const { data: responseData } = response;
+      if (responseData.success) {
+        toast.success(responseData.message);
         fetchCartItem();
-    }, []);
+        //return responseData;
+      }
+    } catch (error) {
+      AxiosToastError(error);
+      return error;
+    }
+  };
 
-    useEffect(() => {
-        const qty = cartItem.reduce((preve, curr) => {
-          return preve + curr.quantity;
-        }, 0);
-        setTotalQty(qty);
-        //console.log("qty",qty)
-    
-        const tPrice = cartItem.reduce((preve, curr) => {
-          const priceAfterDiscount = pricewithDiscount(curr?.productId?.price,curr?.productId?.discount)
+  const deleteCartItem = async (cartId) => {
+    try {
+      const response = await Axios({
+        ...SummaryApi.deleteCartItem,
+        data: {
+          _id: cartId,
+        },
+      });
+      const { data: responseData } = response;
+      if (responseData.success) {
+        toast.success(responseData.message);
+        fetchCartItem();
+        //return responseData;
+      }
+    } catch (error) {
+      AxiosToastError(error);
+    }
+  };
 
-          return preve + (priceAfterDiscount * curr.quantity)
-        }, 0);
-        setTotalPrice(tPrice);
-        //console.log("tPrice", tPrice);
-      }, [cartItem]);
-    
+  useEffect(() => {
+    fetchCartItem();
+  }, []);
 
+  useEffect(() => {
+    const qty = cartItem.reduce((preve, curr) => {
+      return preve + curr.quantity;
+    }, 0);
+    setTotalQty(qty);
+    //console.log("qty",qty)
 
+    const tPrice = cartItem.reduce((preve, curr) => {
+      const priceAfterDiscount = pricewithDiscount(
+        curr?.productId?.price,
+        curr?.productId?.discount
+      );
 
-    return (
-        <GlobalContext.Provider value={{fetchCartItem,
-          updateCartItem,
-          deleteCartItem,
-          totalPrice,
-          totalQty,
+      return preve + priceAfterDiscount * curr.quantity;
+    }, 0);
+    setTotalPrice(tPrice);
+    //console.log("tPrice", tPrice);
 
-        }}> 
-            {children}
-        </GlobalContext.Provider>
-    )
-}
+    const notDiscountPrice = cartItem.reduce((preve, curr) => {
+      return preve + curr?.productId?.price * curr.quantity;
+    }, 0);
+    setNotDiscountTotalPrice(notDiscountPrice);
+  }, [cartItem]);
+
+  return (
+    <GlobalContext.Provider
+      value={{
+        fetchCartItem,
+        updateCartItem,
+        deleteCartItem,
+        totalPrice,
+        totalQty,
+        notDiscountTotalPrice,
+      }}
+    >
+      {children}
+    </GlobalContext.Provider>
+  );
+};
 
 export default GlobalProvider;
