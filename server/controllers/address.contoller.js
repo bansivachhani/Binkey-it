@@ -104,6 +104,13 @@ export const deleteAddressController = async (req, res) => {
         status: false,
       }
     );
+
+    return res.json({
+      message: "Address remove",
+      error: false,
+      success: true,
+      data: disableAddress,
+    });
   } catch (error) {
     return res.status(500).json({
       message: error.message || error,

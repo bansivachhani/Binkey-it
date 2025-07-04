@@ -112,7 +112,7 @@ const SummaryApi = {
     url: "/api/product/delete-product",
     method: "delete",
   },
-  searchProduct : {
+  searchProduct: {
     url: "/api/product/search-product",
     method: "post",
   },
@@ -129,7 +129,7 @@ const SummaryApi = {
     method: "put",
   },
   deleteCartItem: {
-    url : "/api/cart/delete-cart-item",
+    url: "/api/cart/delete-cart-item",
     method: "delete",
   },
   createAddress: {
@@ -140,14 +140,14 @@ const SummaryApi = {
     url: "/api/address/get",
     method: "get",
   },
-  updateAddress : {
-    url : "/api/address/update",
-    method : "put"
+  updateAddress: {
+    url: "/api/address/update",
+    method: "put",
   },
-  disableAddress : {
-    url : "/api/address/disable",
-    method : "delete"
-  }
+  disableAddress: {
+    url: "/api/address/disable",
+    method: "delete",
+  },
 };
 
 export default SummaryApi;
