@@ -44,7 +44,7 @@ const DisplayCartItem = ({ close }) => {
           {/***display items */}
           {cartItem[0] ? (
             <>
-              <div className="flex items-center justify-between px-4 py-2 bg-blue-100 text-blue-500 rounded-full">
+              <div className="flex items-center justify-between px-4 py-2 bg-blue-100 text-blue-400 rounded-full">
                 <p>Your total savings</p>
                 <p>{DisplayPriceInRupees(notDiscountTotalPrice - totalPrice)}</p>
               </div>

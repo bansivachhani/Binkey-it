@@ -47,9 +47,9 @@ const GlobalProvider = ({ children }) => {
 
       const { data: responseData } = response;
       if (responseData.success) {
-        toast.success(responseData.message);
+        //toast.success(responseData.message);
         fetchCartItem();
-        //return responseData;
+        return responseData;
       }
     } catch (error) {
       AxiosToastError(error);
