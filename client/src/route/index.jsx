@@ -21,6 +21,8 @@ import ProductListPage from "../pages/ProductListPage";
 import ProductDisplayPage from "../pages/ProductDisplayPage";
 import CartMobile from "../pages/CartMobile";
 import CheckoutPage from "../pages/CheckoutPage";
+import Success from "../pages/Success";
+import Cancel from "../pages/Cancel";
 
 const router = createBrowserRouter([
   {
@@ -56,66 +58,91 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
       },
       {
-        path : "user",
-        element : <UserMenuMobile/>
+        path: "user",
+        element: <UserMenuMobile />,
       },
       {
-        path : "dashboard",
-        element : <Dashboard/>,
-        children : [
+        path: "dashboard",
+        element: <Dashboard />,
+        children: [
           {
-            path : "profile",
-            element : <Profile/>
+            path: "profile",
+            element: <Profile />,
           },
           {
-            path : "myorders",
-            element : <MyOrders/>
+            path: "myorders",
+            element: <MyOrders />,
           },
           {
-            path : "address",
-            element : <Address/>
+            path: "address",
+            element: <Address />,
           },
           {
-            path : "category",
-            element :<AdminPermission><CategoryPage/></AdminPermission> 
+            path: "category",
+            element: (
+              <AdminPermission>
+                <CategoryPage />
+              </AdminPermission>
+            ),
           },
           {
-            path : "subcategory",
-            element :<AdminPermission> <SubCategoryPage/></AdminPermission> 
+            path: "subcategory",
+            element: (
+              <AdminPermission>
+                {" "}
+                <SubCategoryPage />
+              </AdminPermission>
+            ),
           },
           {
-            path : 'upload-product',
-            element :<AdminPermission> <UploadProduct/></AdminPermission> 
+            path: "upload-product",
+            element: (
+              <AdminPermission>
+                {" "}
+                <UploadProduct />
+              </AdminPermission>
+            ),
           },
           {
-            path : "product",
-            element : <AdminPermission> <ProductAdmin/></AdminPermission>
+            path: "product",
+            element: (
+              <AdminPermission>
+                {" "}
+                <ProductAdmin />
+              </AdminPermission>
+            ),
           },
-          
-        ]
+        ],
       },
       {
-        path : ":category",
-        children : [
+        path: ":category",
+        children: [
           {
-            path : ":subCategory",
-            element : <ProductListPage/>
-          }
-        ]
+            path: ":subCategory",
+            element: <ProductListPage />,
+          },
+        ],
       },
       {
-        path : "product/:product",
-        element : <ProductDisplayPage/>
-
+        path: "product/:product",
+        element: <ProductDisplayPage />,
       },
       {
-        path : 'cart',
-        element :<CartMobile/>
+        path: "cart",
+        element: <CartMobile />,
       },
       {
-        path : 'checkout',
-        element :<CheckoutPage/>
-      }
+        path: "checkout",
+        element: <CheckoutPage />,
+      },
+      {
+        path: "success",
+        element: <Success />,
+      },
+      {
+        path: "cancel",
+        element: <Cancel />,
+      },
     ],
   },
 ]);
