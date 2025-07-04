@@ -15,6 +15,10 @@ const AddAddress = ({close}) => {
     const { register, handleSubmit,reset } = useForm()
     const { fetchAddress } = useGlobalContext()
 
+    const onSubmit = (data)=>{
+        console.log("data",data)
+    }
+
 
    return (
     <section className='bg-black fixed top-0 left-0 right-0 bottom-0 z-50 bg-opacity-70 h-screen overflow-auto'>
@@ -26,7 +30,7 @@ const AddAddress = ({close}) => {
                 </button>
             </div>
             <form className='mt-4 grid gap-4' 
-            // onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
             >
                 <div className='grid gap-1'>
                     <label htmlFor='addressline'>Address Line :</label>
