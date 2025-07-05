@@ -155,7 +155,8 @@ const SummaryApi = {
   payment_url : {
     url : "/api/order/checkout",
     method : "post"
-  }
+  },
+  
 };
 
 export default SummaryApi;
