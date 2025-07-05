@@ -52,4 +52,4 @@ Follow the steps below to get the project up and running locally:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/bansivachhani/blink-it.git
+git clone https://github.com/bansivachhani/Binkey-it
