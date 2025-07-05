@@ -111,41 +111,40 @@ export async function paymentController(req, res) {
   }
 }
 
+const getOrderProductItems = async ({
+  lineItems,
+  userId,
+  addressId,
+  paymentId,
+  payment_status,
+}) => {
+  const productList = [];
 
-const getOrderProductItems = async({
-    lineItems,
-    userId,
-    addressId,
-    paymentId,
-    payment_status,
- })=>{
-    const productList = []
+  if (lineItems?.data?.length) {
+    for (const item of lineItems.data) {
+      const product = await Stripe.products.retrieve(item.price.product);
 
-    if(lineItems?.data?.length){
-        for(const item of lineItems.data){
-            const product = await Stripe.products.retrieve(item.price.product)
+      const paylod = {
+        userId: userId,
+        orderId: `ORD-${new mongoose.Types.ObjectId()}`,
+        productId: product.metadata.productId,
+        product_details: {
+          name: product.name,
+          image: product.images,
+        },
+        paymentId: paymentId,
+        payment_status: payment_status,
+        delivery_address: addressId,
+        subTotalAmt: Number(item.amount_total / 100),
+        totalAmt: Number(item.amount_total / 100),
+      };
 
-            const paylod = {
-                userId : userId,
-                orderId : `ORD-${new mongoose.Types.ObjectId()}`,
-                productId : product.metadata.productId, 
-                product_details : {
-                    name : product.name,
-                    image : product.images
-                } ,
-                paymentId : paymentId,
-                payment_status : payment_status,
-                delivery_address : addressId,
-                subTotalAmt  : Number(item.amount_total / 100),
-                totalAmt  :  Number(item.amount_total / 100),
-            }
-
-            productList.push(paylod)
-        }
+      productList.push(paylod);
     }
+  }
 
-    return productList
- }
+  return productList;
+};
 
 //http://localhost:8080/api/order/webhook
 export async function webhookStripe(request, response) {
@@ -190,4 +189,27 @@ export async function webhookStripe(request, response) {
 
   // Return a response to acknowledge receipt of the event
   response.json({ received: true });
+}
+
+export async function getOrderDetailsController(req, res) {
+  try {
+    const userId = req.userId; // order id
+
+    const orderlist = await OrderModel.find({ userId: userId })
+      .sort({ createdAt: -1 })
+      .populate("delivery_address");
+
+    return res.json({
+      message: "order list",
+      data: orderlist,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
 }
