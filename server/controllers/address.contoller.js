@@ -93,23 +93,56 @@ export const updateAddressController = async (req, res) => {
   }
 };
 
+// export const deleteAddressController = async (req, res) => {
+//   try {
+//     const userId = req.userId;
+//     const { _id } = req.body;
+
+//     const result = await AddressModel.updateOne(
+//       { _id: userId },
+//       {
+//         status: false,
+//       }
+//     );
+
+//     return res.json({
+//       message: "Address remove",
+//       error: false,
+//       success: true,
+//       data: result,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       message: error.message || error,
+//       error: true,
+//       success: false,
+//     });
+//   }
+// };
+
+
 export const deleteAddressController = async (req, res) => {
   try {
     const userId = req.userId;
-    const { _id } = req.body;
+    const { _id } = req.query; // <--- Fix here
 
-    const disableAddress = await AddressModel.updateOne(
-      { _id: _id, userId },
-      {
-        status: false,
-      }
+    if (!_id) {
+      return res.status(400).json({
+        message: "_id is required",
+        error: true,
+        success: false,
+      });
+    }
+
+    const result = await AddressModel.updateOne(
+      { _id, userId },
+      { status: false }
     );
 
-    return res.json({
-      message: "Address remove",
-      error: false,
+    return res.status(200).json({
+      message: "Address successfully disabled",
       success: true,
-      data: disableAddress,
+      result,
     });
   } catch (error) {
     return res.status(500).json({
