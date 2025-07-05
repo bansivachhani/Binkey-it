@@ -111,6 +111,42 @@ export async function paymentController(req, res) {
   }
 }
 
+
+const getOrderProductItems = async({
+    lineItems,
+    userId,
+    addressId,
+    paymentId,
+    payment_status,
+ })=>{
+    const productList = []
+
+    if(lineItems?.data?.length){
+        for(const item of lineItems.data){
+            const product = await Stripe.products.retrieve(item.price.product)
+
+            const paylod = {
+                userId : userId,
+                orderId : `ORD-${new mongoose.Types.ObjectId()}`,
+                productId : product.metadata.productId, 
+                product_details : {
+                    name : product.name,
+                    image : product.images
+                } ,
+                paymentId : paymentId,
+                payment_status : payment_status,
+                delivery_address : addressId,
+                subTotalAmt  : Number(item.amount_total / 100),
+                totalAmt  :  Number(item.amount_total / 100),
+            }
+
+            productList.push(paylod)
+        }
+    }
+
+    return productList
+ }
+
 //http://localhost:8080/api/order/webhook
 export async function webhookStripe(request, response) {
   const event = request.body;
@@ -126,7 +162,7 @@ export async function webhookStripe(request, response) {
         session.id
       );
 
-      console.log(lineItems)
+      //console.log(lineItems)
       const userId = session.metadata.userId;
       const orderProduct = await getOrderProductItems({
         lineItems: lineItems,
