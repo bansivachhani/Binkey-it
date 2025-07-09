@@ -50,8 +50,6 @@ Follow the steps below to get the project up and running locally:
 - NPM or Yarn
 
 ## 🎬 Demo Preview
-## 🎬 Demo Preview
-
 ![Binkey Demo](client/src/assets/Binkey.gif)
 
 
