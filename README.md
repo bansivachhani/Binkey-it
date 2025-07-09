@@ -50,7 +50,10 @@ Follow the steps below to get the project up and running locally:
 - NPM or Yarn
 
 ## 🎬 Demo Preview
-[Click here to watch the demo video](assets/Binkey.gif)
+## 🎬 Demo Preview
+
+![Binkey Demo](client/src/assets/Binkey.gif)
+
 
 
 ### 1. Clone the Repository
