@@ -48,9 +48,10 @@ Follow the steps below to get the project up and running locally:
 
 - Node.js (LTS version)
 - NPM or Yarn
-
 ## 🎬 Demo Preview
-![Binkey Demo](client/src/assets/Binkey.gif)
+
+[▶️ Watch Demo on Google Drive](https://drive.google.com/drive/folders/16HFzX7tL8txuezIkrVDm4cgKRUmG71YV)
+
 
 
 
