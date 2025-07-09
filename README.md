@@ -50,7 +50,7 @@ Follow the steps below to get the project up and running locally:
 - NPM or Yarn
 ## 🎬 Demo Preview
 
-[▶️ Watch Demo on Google Drive](https://youtu.be/slN124MPVrc)
+[▶️ Watch Demo on Youtube](https://youtu.be/slN124MPVrc)
 
 
 
